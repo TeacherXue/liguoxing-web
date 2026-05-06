@@ -1,0 +1,580 @@
+
+技术配置
+Technical Document
+
+
+
+
+
+
+
+
+
+
+
+青岛利国兴精密机械有限公司
+
+
+技术附件
+Techanical Attachment
+	•	设备主要技术参数 
+Forming                                                       Hot air
+粘合成型方式                                                  热风
+	•	
+适用面料                                                      PP覆膜布
+Feasible material                                              Laminated PP Tubular
+设计最高速度                                                     120pcs/min
+Max Speed
+	•	生产速度根据袋长、底宽而不同
+Production speed based on bag length and bottom width
+底宽8-9cm时                                            速度speed≤100pcs/min
+Bottom width 8-9cm
+底宽10-11cm时                                           速度speed≤110pcs/min
+Bottom width 10-11cm
+底宽12-13cm时                                          速度speed≤90pcs/min
+Bottom width 12-13cm
+底宽14-16cm时                                           速度speed≤70pcs/min
+Bottom width 14-16cm
+基布面料要求Ground fabric quality requirement：
+	•	透明度>65%的材料无法加工
+Material Transparent >65% can not be processed
+	•	 复膜剥离强度≥2.7N/CM
+Lamination strength≥2.7N/CM
+	•	基布膜边宽度≤5mm
+Lamination trimming edge width≤5mm
+
+袋宽                                                                350-600mm
+Sack width                                                            350-600mm
+成品袋长                                                            450-910mm
+Finished Sack length                                                    450-910
+
+底宽 (阀口袋)                                                        80-160mm
+Bottom Width （Valve Type）
+                                                
+成品袋型                                                     敞口袋和方底阀口袋
+Finished Bag                                                Valve or Open Mouth基布要求                                                        55-80g/m2                                                                                                                                    
+Basic Fabric
+覆膜要求                                                        18-20g/m2 
+Lamination
+                                                                      
+功率                                                             120kw
+Power
+设备尺寸                                                         15x8.5x2.3m
+Machine Size
+
+	•	用户自备 User Supply
+电源    电压380V，三相交流电，配零线和接地保护，如电压波动过大，建议配稳压器
+Gas Source   Voltage 380V 3Phase AC with Zero and Ground Line. If voltage fluctuate so much. Suggestion for voltage regulator.
+气源                                                     0.7Mpa,  120 M3/h
+Gas Source
+水源                                                      0.4Mpa，1 M3/h,« 20°
+Water Source 
+
+	•	设备组成Machine Unit                    
+
+放送部Unwinding Unit
+	•	自动张力调节
+Tension auto adjustment
+	•	放送配气涨轴，布卷卷芯尺寸：8英寸和3英寸均可
+Unwind station with Air Expansion Shaft. The roll core diameter: available for both 8 and 3 inches.
+	•	自动上布，布卷直径1000-1400mm
+Auto loading. Unwinding diameter 1000-1400mm
+	•	自动纠偏
+Auto EPC
+微孔处理Micro Perforation Unit
+	•	灌装物品时达到更好透气性
+Micro perforation for better air permeability
+	•	双面微孔处理，密度 64针/cm2
+Micro perforation for both sides. The density is 64needles per cm2
+输送装置Convey Unit
+	•	伺服输送
+Convey driven by servo motor
+	•	色标检测
+Sensor mark tracking
+冲孔Punching Holes
+	•	冲孔位置可调
+The position of punching can be adjustment
+	•	气动方式
+Pneumatic Driven
+	•	废片吸取
+Punching hole fabric sucking
+切断Cutting Unit
+	•	色标或预设长度切断
+Cutting length control by sensor tracking or pre-setting
+	•	伺服驱动
+Cutting driven by servo motor
+	•	切断辅助装置
+Cutting assistant device
+	•	吹气装置
+Blowing device
+转向装置Turning Device
+	•	机械爪输送转向
+Gripper catch the bags for run direction change
+	•	机械爪间距可调
+Gripper distance can be adjusted
+	•	永磁体钢带输送袋片
+Bags convey driven by magnetic steel belt
+	•	钢带涨力可调
+Tension of steel belt can be adjustment
+	•	钢带、机械爪输送为同一驱动动力
+The power of steel belt and grippers driven by same motor
+袋底打开End Open
+	•	袋底打开装置由吸盘装置、仰角撑开器等组成, 
+End open is comprised by suckers. Spreaders and so on 
+	•	根据袋宽选择吸嘴数量
+Suckers chosen depend on bag width                       
+	•	撑开器精确开底
+Spreader for ends open precision
+	•	撑开器长度可调
+The spreader length can be adjustment
+	•	伺服驱动
+Driven by servo
+阀口成型  Valve Forming
+	•	放送配气涨轴，布卷卷芯尺寸8英寸和3英寸均可
+Unwind station with air shaft. Roll core diameter available for 8 and 3 inches.
+	•	光电纠偏
+Auto edge guiding system
+	•	伺服输送阀口
+Valve patch convey driven by servo
+	•	预热装置
+Pre-heating for better welding
+	•	热风焊接系统
+Hot Welding System
+	•	在线调节阀口位置
+Adjustment of valve patch position during operation is possible
+	•	切刀调整方便，带有特殊设计的尺寸标尺。
+Easy adjustment of knives with a specially designed gauge
+	•	焊接进退装置防止设备停机时烫伤袋片
+Welding moving system for avoiding burn bags when machine stop
+	•	橡胶压辊间隙可调，气动自动调节
+Gap adjustment of rubber roller driven by pneumatic
+	•	阀口装置单独驱动动力
+Valve own driven power
+                 
+阀口切断长度                                                         80-200mm
+Valve Cutting Length
+
+袋底折边Bottom Folding
+	•	底宽变化，手轮调整折边器之间的间距
+Manual adjustment folding gap based on bottom width
+袋底成型 Bottom Forming
+	•	放送配气涨轴，布卷卷芯尺寸8英寸和3英寸均可
+Unwind station with air shaft. Roll core diameter available for 8 and 3 inches.
+	•	光电纠偏
+Auto edge guiding system
+	•	伺服输送底贴
+Bottom patch convey driven by servo
+	•	预热装置
+Pre-heating for better welding
+	•	热风焊接系统
+Hot Welding System
+	•	在线调节底贴位置
+Bottom Patch position can be on line adjustment
+	•	切刀调整方便，带有特殊设计的尺寸标尺
+Easy adjustment of knives with a specially designed gauge
+	•	焊接进退装置防止设备停机时烫伤袋片
+Welding moving system for avoiding burn bags when machine stop
+	•	橡胶压辊间隙可调，气动自动调节
+Gap adjustment of rubber roller driven by pneumatic
+	•	底贴装置单独驱动动力
+Its own driven power
+	•	光纤检测底贴，底贴缠绕保护自动停机
+Photo-cell detect bottom patch. Auto machine stop once bottom patch jammed
+底贴切断长度                                                        230-500mm
+Bottom Patch Cutting Length
+底贴宽度                                                             75-175mm
+Bottom Patch Width
+计数出袋Accounting
+	•	光电自动计数
+Photo-cell control accounting
+	•	拍袋装置使得堆集效果更好
+Pat system for good stacking
+剔废装置Wastes Ejecting
+	•	剔废装置
+Ejecting Device
+	•	废品自动检测剔除
+Wastes auto detected for ejecting
+	•	剔废输送装置
+Wastes convey 
+	•	气动驱动
+Triggering by pneumatic
+预热处理Preheating 
+	•	预热刀辊、预热辊等，使得焊接更加牢固。
+For tempering cutting cylinder and preheating cylinders for better welding
+
+整机分离装置Separation
+	•	整机操作侧和传动侧可自动分离
+Auto separation between machine operation and driven side
+	•	电机驱动
+Driven by motor
+中央控制系统Central control system
+	•	先进的检测、控制、驱动系统。
+Adopts advanced detection .control and driven system
+	•	带有文字说明的流程图，控制方便，图示直观。
+Self-explaining process images for intuitive and comfortable control
+	•	高分辨率、高灵敏度的压力、电感式、光电传感器精确采集现场数据
+Pressure sensors. inductive sensors and photo sensors with high resolution definition and sensitivity collect the on-the-spot data accurately
+	•	采用可编程计算机控制、分散安装的可带电插拔模块化I/O系统，可更新和增加模块；配有再生扼流圈、线型滤波器和逆变器的完美自动化伺服驱动系统，通信、控制循环周期极短，可高效精确地完成定位任务；
+It adopts PLC and dispersed installed hot plug module I/O system. which can update and increase modules. The perfect auto servo driving system equipped with regenerative chokes. linear filters and inverters ensures precise location task within a very short period of communication and control
+	•	高清晰度的触摸屏集控制与显示为一体，实现设置、监控、诊断等功能，节能高效，可直观、舒适地操作
+Touched screen with high resolution definition is integrated with control and display. Which can achieve functions of setting. Monitoring and diagnosing. The controlling system is easy and comfortable to operate with high efficiency and less energy.
+四．电气仪表清单   Electric brand
+序号
+No
+部件名称
+Name
+品牌
+Brand
+1
+风门控制电磁阀
+Magnetic Valve
+ For Hot Air Gun Mouth
+SMC
+2
+打落气缸 
+Dropping Cylinder
+SMC
+3
+风门气缸 
+Air Cylinder
+ For Hot Air Gun Mouth
+SMC
+4
+接近开关
+Approaching switch
+易福门
+IFM. Germany
+5
+光电开关 
+Photo-cell switch
+易福门
+IFM. Germany
+6
+压力传感器
+Pressure feeler
+易福门
+IFM. Germany
+7
+运动控制器
+Motion Controller
+贝加莱
+B&R Austria
+8
+伺服驱动器
+Servo Controller
+贝加莱
+B&R Austria
+9
+滤波器
+Filter
+贝加莱
+B&R Austria
+10
+扼流圈
+Enchoke
+贝加莱
+B&R Austria
+11
+模拟量输入
+Simulation Input
+贝加莱
+B&R Austria
+12
+模拟量输出
+Simulation output 
+贝加莱
+B&R Austria
+13
+数字量输入、输出
+Digital input & Output
+贝加莱
+B&R Austria
+14
+温度模块
+Temperature Module
+贝加莱
+B&R Austria
+15
+接触器
+Contact
+施耐德
+Schneider
+16
+继电器
+Relay
+日本和泉
+IDEC. Japan
+17
+热风头
+Hot Air Gun
+利国兴
+Li Guo Xing
+
+五．随机配件Spare parts
+序号
+No
+名称
+Part Name
+图号或型号
+Design No
+数量
+Quantity
+1
+膨胀螺栓
+Expansion Bolts
+M16       M8   
+40Units+20Units
+2
+吸盘
+Suckers
+　
+500Pcs
+3
+羊角胶帽
+Header for spreader
+　
+20Pcs
+4
+羊角校正模具
+Regulator For Spreader
+BVM120-LJ-07-01到07-06
+1Unit
+5
+羊角加长杆
+Prolonged Rod for spreader
+4个规格
+1Unit 32Pcs
+6
+片基带
+Belt
+1250*15*1
+1P
+7
+片基带
+Belt
+1010*15*1
+2Pcs
+8
+片基带
+Belt
+985*15*1
+2Pcs
+9
+片基带
+Belt
+2005*30*3
+1P
+10
+同步带
+Timing Belt
+T5*15*1500
+4Pcs
+11
+规尺块Scale Plate
+BVM120-LJ-01-01
+2Pcs
+12
+规尺Scale Ruler
+BVM120-LJ-01-02
+2Pcs
+13
+阀口刀对正杆
+Regulator Rod For Valve Blade
+BVM120-LJ-02-01
+2Pcs
+14
+底帖刀模
+Blade Module For Bottom
+BVM120-LJ-06
+1P
+15
+耐热润滑脂
+Lubricated Oil
+　
+1Tube
+16
+磁铁
+Magnetic steel
+　
+50Pcs
+17
+加热芯
+Heating Core
+18KW
+1P
+18
+热电偶Thermocouple
+　
+1P
+19
+吸盘堵头
+Blocking Head For suckers
+　
+20Pcs
+20
+吸盘杆
+Sucking Rod
+　
+6Pcs
+21
+胶水Glue
+　
+2Bottles
+22
+四氟板
+Teflon Plate
+30
+1M
+23
+斜板胶条
+Rubber Plate
+30
+1M
+24
+气路接头
+Gas Jointer
+　
+1Unit
+25
+PU管Tube
+8.     10
+2+10M
+26
+橡胶条
+Rubber Plate
+10*10*1000
+1P
+27
+橡胶棒
+Rubber Rod
+5
+1M
+28
+推抓弹簧
+Gripper Spring
+BVM120-C-02-43
+4Pcs
+29
+推抓扭簧
+Gripper Toque Spring
+BVM120-C-02-39
+4Pcs
+30
+扭簧
+Torque Spring
+BVM120-C-04CZ-01-42
+2Pcs
+31
+切断吹气铜嘴
+Blowing Nozzle
+　
+4Pcs
+32
+紧定螺丝
+Fasten Screw
+M5*6
+20Pcs
+33
+叉子
+Spread Fork
+#2&#3
+各1套
+Each Unit
+34
+电磁阀
+Magnetic Valve
+
+1P
+35
+电磁阀
+Magnetic Valve
+
+1P
+36
+热风咀导流板
+BVM-120-C-06-084
+Blocking Plate For Hot gun
+75
+6Pcs
+
+
+85
+6Pcs
+
+
+95
+6Pcs
+
+
+105
+6Pcs
+
+
+115
+6Pcs
+
+
+125
+6Pcs
+
+
+135
+6Pcs
+
+
+145
+6Pcs
+
+
+155
+6Pcs
+
+
+165
+6Pcs
+
+
+175
+6Pcs
+37
+密封圈Seal Ring
+44*3
+2Pcs
+
+
+58*3
+2Pcs
+
+
+102*3
+2Pcs
+
+
+90*5
+4Pcs
+38
+链扣
+Chain Holder
+
+5Pcs
+39
+羊角归零器
+Zero Adjust for Spreader
+BVM120-LJ-13-1
+1件
+40
+羊角归零箭头
+Zero Pointer for spreader
+BVM120-LJ-13-2
+1件
+41
+随机工具
+Working Tools
+
+1Unit
+
+
+
+
+
+

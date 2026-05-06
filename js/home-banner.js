@@ -12,7 +12,7 @@
 
   let current = 0;
   let timer = null;
-  const interval = 5800;
+  const interval = 5000;
 
   function render(index) {
     slides.forEach((slide, i) => {

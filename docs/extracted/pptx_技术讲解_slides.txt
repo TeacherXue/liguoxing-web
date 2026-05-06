@@ -1,0 +1,305 @@
+===== ppt/slides/slide1.xml =====
+技术介绍
+BVM-120
+型方底阀口制袋机
+青岛利国兴精密机械有限公司
+
+===== ppt/slides/slide2.xml =====
+传统包装袋（线缝
+Sewn Type
+）
+传统包装袋采用缝制工艺，劳动强度大，生产效率低
+人工灌装，工作环境恶劣，容易造成职业病，
+人工装车，劳动强度大，炮灰严重，污染环境
+水泥包装形象脏乱差，水泥品质不能得到提升。
+传统包装袋图片
+人工灌装水泥
+人工装车
+水泥形象脏乱差
+
+===== ppt/slides/slide3.xml =====
+方底阀口包装袋
+方底阀口袋袋型美观，带有自封阀口，纳米微孔，既满足水泥灌装透气要求，也不漏灰
+机器自动进袋灌装水泥，灌装时也不漏灰，车间环境干净
+自动输送装车
+方底阀口袋能有效抱回水泥
+28
+天强度，保证建筑工程不会因水泥强度降低而危及质量
+方底阀口袋图片
+自动灌装水泥
+自动装车
+保护水泥强度
+
+===== ppt/slides/slide4.xml =====
+拉丝机
+:Tape Line
+把颗粒拉成丝
+圆织机
+:Loom
+把丝织成筒状
+PP Tubular fabric
+或者
+ground fabric
+涂膜机
+:Lamination
+在筒状面料上两面涂膜（对方底阀口袋生产非常关键）
+印刷机
+:Printing Machine
+在涂膜上印刷
+方底阀口制袋机
+Block Bottom er
+第一阶段
+第二阶段
+第三阶段
+第四阶段
+第六阶段
+方底阀口包装袋全流程示意图
+
+===== ppt/slides/slide5.xml =====
+BVM-120
+型方底阀口制袋机成型工艺
+设备名称：方底阀口制袋机
+英文关键词：
+Square Bottom Valve Bag Making Machine
+、
+Block Bottom Valve Bag Making Machine
+、
+Block Bottomer
+成型工艺：热风
+(Hot Air)
+图
+4
+：热风头
+(Hot Air Gun)
+风机（
+Air Blower
+、
+Fan
+）把空气吹进加热芯（
+Heat Core
+）装置内，空气加热后从图
+4
+热风头模嘴处吹到面料上的涂膜层
+(Lamination)
+加热最高温度可达到
+750
+度
+
+===== ppt/slides/slide6.xml =====
+筒状布卷放送
+Tubular Fabric Roll Unwind
+切断成为袋片
+Cutting into P by P
+袋底打开
+Bottom End Open
+贴阀口
+Valve Patch
+贴底贴
+Bottom Patch Cover
+第一阶段
+第二阶段
+第三阶段
+第四阶段
+第六阶段
+方底阀口包装袋生产示意图
+第五阶段
+袋底闭合
+Bottom End Close
+筒布放送
+PP Tubular fabric
+或者
+PP  ground Fabric  unwind
+阀口放送
+Valve Patch Unwind
+底贴放送
+Cover Patch Unwind
+
+===== ppt/slides/slide7.xml =====
+方底阀口袋
+: Block Bottom Valve Bag
+、
+Bottom Bag
+、
+Valve Bag
+加工原材料：涂膜筒布布卷（
+Laminated PP Tubular Fabric
+）
+、
+阀口平状涂膜布卷
+(Laminated Flat Valve Patch Fabric)
+、
+底贴平状涂膜布卷（
+Laminated Bottom Patch Fabric
+）
+阀口类型：
+Valve Mouth Type
+左侧：常规阀口
+Regular Valve
+右侧
+:
+口袋阀或者外阀口
+Pocket Valve
+、
+Longger
+Valve
+方底阀口包装袋示意图
+
+===== ppt/slides/slide8.xml =====
+包装袋示意图
+
+===== ppt/slides/slide9.xml =====
+延迟符
+01
+配电柜
+02
+布卷放送
+03
+打孔
+&
+切断
+04
+袋底打开
+05
+阀口成型
+06
+袋底闭合
+07
+贴底贴
+08
+成品袋
+09
+成品袋收集
+
+===== ppt/slides/slide10.xml =====
+主要参数
+速度：最高
+120
+条
+/
+分钟
+根据袋子规格
+、速度、面料情况、操作工熟练程度，正常在
+90-115
+条
+/
+分钟，
+24
+小时
+10-15
+万条。
+成品袋规格
+正常：袋长
+450-910mm
+袋宽：
+350-600mm
+底宽：
+80-160mm
+小规格：袋长
+380-720mm
+袋宽：
+250-600mm
+底宽：
+80-110mm
+用电量
+总装机：
+120kw
+。实际：
+85KW
+1
+个操作工
++4
+个后续收袋工
+用人
+废品率
+合同签
+3%
+，实际在
+1.5%
+以内。
+袋型
+方底阀口袋和敞口袋
+设备尺寸
+15x9x2.3m
+集装箱使用
+2x40HQ+1X20GP
+安装调试
+自开始安装大约
+10
+天可以试机
+其他
+冷却水
+Cooling water
+和压缩空气
+Compressor air
+分切机
+Slitter
+
+===== ppt/slides/slide11.xml =====
+视频播放
+接下来请大家观赏
+BVM-120
+型方底阀口制袋
+机在用户的
+使用视频
+
+===== ppt/slides/slide12.xml =====
+部位介绍
+双工位放送是基本配置，可以在另一布卷工作时，提前把预备布卷放置在另一工位，换卷效率提高。
+针密度：
+64
+针
+/cm3
+双工位不停机上卷
+Double Loading Station
+微孔打孔功能（
+Nano Perforation
+）
+
+===== ppt/slides/slide13.xml =====
+部位介绍
+真空吸开
+Vacuum Pump
+伺服
+Servo Driven
+针密度：
+64
+针
+/cm3
+切断
+&
+转向
+Cutting&Gripper
+Convey
+吸盘打开
+Sucker Open
+
+===== ppt/slides/slide14.xml =====
+部位介绍
+袋底四角成为三角形状
+针密度：
+64
+针
+/cm3
+仰角撑开
+Spreader
+阀口成型
+
+===== ppt/slides/slide15.xml =====
+部位介绍
+袋底闭合
+Bag End Close
+贴底贴
+Bottom Patch Cover
+
+===== ppt/slides/slide16.xml =====
+青岛
+利国兴
+奥地利史太林格
+温州华造
+竞争对手
+
+===== ppt/slides/slide17.xml =====
+谢谢
+青岛利国兴精密机械有限公司
+销售部：彭占强
+18266627772
