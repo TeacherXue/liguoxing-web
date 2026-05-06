@@ -1,0 +1,12 @@
+<svg width="900" height="620" viewBox="0 0 900 620" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="900" height="620" rx="20" fill="#EAF4FC"/>
+  <rect x="70" y="90" width="760" height="430" rx="20" fill="#CFE4F4"/>
+  <rect x="130" y="150" width="210" height="300" rx="12" fill="#0A4F86"/>
+  <rect x="370" y="180" width="390" height="55" rx="10" fill="#0F6CB3"/>
+  <rect x="370" y="258" width="320" height="40" rx="8" fill="#6BA8D4"/>
+  <rect x="370" y="320" width="360" height="40" rx="8" fill="#6BA8D4"/>
+  <rect x="370" y="382" width="280" height="40" rx="8" fill="#6BA8D4"/>
+  <circle cx="170" cy="498" r="36" fill="#122131"/>
+  <circle cx="670" cy="498" r="36" fill="#122131"/>
+  <text x="450" y="575" text-anchor="middle" fill="#0A4F86" font-size="28" font-family="Arial, sans-serif">EQUIPMENT PLACEHOLDER</text>
+</svg>

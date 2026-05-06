@@ -1,0 +1,13 @@
+<svg width="1920" height="820" viewBox="0 0 1920 820" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1920" height="820" fill="#082C48"/>
+  <rect x="130" y="138" width="1660" height="544" rx="20" fill="#11466F"/>
+  <rect x="240" y="246" width="520" height="90" rx="12" fill="#256FA8"/>
+  <rect x="240" y="372" width="420" height="64" rx="8" fill="#5FA2CF"/>
+  <rect x="240" y="464" width="610" height="64" rx="8" fill="#5FA2CF"/>
+  <rect x="980" y="220" width="690" height="330" rx="20" fill="#9BC4E0"/>
+  <rect x="1040" y="282" width="220" height="236" rx="10" fill="#0A4F86"/>
+  <rect x="1290" y="315" width="310" height="56" rx="8" fill="#136CA9"/>
+  <rect x="1290" y="392" width="260" height="42" rx="8" fill="#4E93C1"/>
+  <rect x="1290" y="450" width="220" height="42" rx="8" fill="#4E93C1"/>
+  <text x="960" y="738" text-anchor="middle" fill="#CDE7F8" font-size="48" font-family="Arial, sans-serif">BANNER PLACEHOLDER 03</text>
+</svg>
