@@ -14,9 +14,10 @@
     ".applications-band .band-head",
     ".application-card",
     ".how-section .section-head",
-    ".workflow article",
+    ".workflow",
     ".news-head",
     ".news-card",
+    ".global-customer",
     ".cta",
   ];
 
