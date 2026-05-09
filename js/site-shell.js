@@ -16,6 +16,12 @@
       var active = false;
       if (href === "/") {
         active = path === "/" || path.endsWith("/index.html");
+      } else if (href === "/equipment.html") {
+        if (a.classList.contains("nav-link")) {
+          active = path === "/equipment.html" || path.indexOf("/equipment-") === 0;
+        } else {
+          active = path === "/equipment.html";
+        }
       } else if (href === "/application.html") {
         active = path === "/application.html" || path.indexOf("/applications/") === 0;
       } else if (href === "/news.html") {
