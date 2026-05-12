@@ -24,8 +24,8 @@
         'Direct Block Bottomer Machine<br><span>Manufacturer</span>',
       text:
         "With 30 years of manufacturing experience, we provide factory-direct square bottom valve bag making machines with premium quality and prices.",
-      primary: "Explore Equipment <b>-></b>",
-      secondary: "Request a Quote <b>o</b>",
+      primary: "Explore Equipment",
+      secondary: "Request a Quote",
     },
     {
       bg: 'url("/images/home.jpg")',
@@ -35,8 +35,8 @@
         'Advanced Hot Air<br><span>Welding Technology</span>',
       text:
         "Featuring servo-driven control, 120 pcs/min high-speed production, and nano micro-perforation, our machines deliver dust-free, superior packaging solutions.",
-      primary: "Explore Equipment <b>-></b>",
-      secondary: "Request a Quote <b>o</b>",
+      primary: "Explore Equipment",
+      secondary: "Request a Quote",
     },
     {
       bg: 'url("/images/p1.jpg")',
@@ -46,8 +46,8 @@
         'Trusted By Global<br><span>Packaging Plants</span>',
       text:
         "With over 200 sets delivered worldwide, we empower top cement and chemical factories globally with reliable valve bag production lines.",
-      primary: "Explore Equipment <b>-></b>",
-      secondary: "Request a Quote <b>o</b>",
+      primary: "Explore Equipment",
+      secondary: "Request a Quote",
     },
   ];
 

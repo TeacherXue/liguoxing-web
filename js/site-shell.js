@@ -45,7 +45,7 @@
     }
 
     function load(name) {
-      return fetch("/includes/" + name + ".html").then(function (r) {
+      return fetch("/includes/" + name + ".html", { cache: "no-cache" }).then(function (r) {
         if (!r.ok) throw new Error("Failed to load partial: " + name);
         return r.text();
       });
