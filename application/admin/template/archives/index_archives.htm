@@ -1,0 +1,436 @@
+{include file="public/layout" /}
+
+<body style="background: #F5F5F5; overflow: auto; cursor: default; -moz-user-select: inherit;min-width:auto;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div style="height: 10px;"></div>
+<div class="page min-hg-c-66">
+    <div class="flexigrid" style="margin-top: 0px;min-height: 600px;">
+        <div class="mDiv"><div class="ftitle">{include file="archives/tags_btn" /}</div></div>
+        <div class="header-bar mb20">
+            <div class="more">
+                <div class="search">
+                    <div class="content">
+                        <form id="searchForm" action="{:url('Archives/index_archives')}" method="get" onsubmit="layer_loading('正在处理');" style="display: unset;">
+                            {$searchform.hidden|default=''}
+                            <input type="hidden" name="typeid" value="{$typeid}">
+                            <div class="ey-form-item"><label class="users-form-item-label">关键词：</label>
+                                <div class="users-form-item-content">
+                                    <div class="users-select">
+                                        <div tabindex="0" class="users-select-selection">
+                                            <div class="sDiv2">
+                                                <input type="text" size="50" name="keywords" value="{$Request.param.keywords}" class="qsbox w220" placeholder="请输入文档标题/ID">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ey-form-item">
+                                <label class="users-form-item-label">属性：</label>
+                                <div class="users-form-item-content">
+                                    <div class="users-select">
+                                        <div tabindex="0" class="users-select-selection">
+                                            <div>
+                                                <select name="flags" id="flag">
+                                                    <option value="">请选择</option>
+                                                    {volist name="archives_flags" id="vo"}
+                                                    <option value="{$vo.flag_fieldname}" {eq name="$Request.param.flags" value="$vo.flag_fieldname"}selected{/eq}>{$vo.flag_name}</option>
+                                                    {/volist}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ey-form-item"><label class="users-form-item-label">发布时间：</label>
+                                <div class="users-form-item-content">
+                                    <div class="users-select">
+                                        <div tabindex="0" class="users-select-selection">
+                                            <div class="sDiv2">
+                                                <input type="text" name="add_time" id="eYLaydateTimeLinkage" data-max_date="{php}echo date('Y-m-d');{/php}" autocomplete="off"  class="qsbox" placeholder="请选择" lay-key="1" style="width: 220px;" value="{$Request.param.add_time}">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {notempty name="$global.web_citysite_open"}
+                            <div class="ey-form-item"><label class="users-form-item-label">区域：</label>
+                                <div class="users-form-item-content">
+                                    <div class="users-select">
+                                        <div tabindex="0" class="users-select-selection">
+                                            <div class="">
+                                                <select name="province_id" id="province_id" onchange="set_city_list(0);">
+                                                    <option value="0">全国</option>
+                                                    {volist name=':get_site_province_list()' id='vo'}
+                                                    <option value="{$vo.id}" {eq name="$Request.param.province_id" value="$vo.id" } selected="true" {/eq}>{$vo.name}</option>
+                                                    {/volist}
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="users-select" style="display: none;" >
+                                        <div tabindex="0" class="users-select-selection">
+                                            <div class="">
+                                                <select name="city_id" id="city_id" onchange="set_area_list(0);">
+                                                    <option value="">--请选择--</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="users-select" style="display: none;" >
+                                        <div tabindex="0" class="users-select-selection">
+                                            <div class="">
+                                                <select name="area_id" id="area_id">
+                                                    <option value="">--请选择--</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <script type="text/javascript">
+                                try {
+                                    var isArchivesQuery = true;
+                                    set_city_list({$Request.param.city_id|default=0});
+                                    set_area_list({$Request.param.area_id|default=0});
+                                }catch(e){}
+                                /*$(document).ready(function(){
+                                    $('#searchForm select[name=province_id],#searchForm select[name=city_id],#searchForm select[name=area_id]').change(function(){
+                                        $('#searchForm').submit();
+                                    });
+                                });*/
+                            </script>
+                            {/notempty}
+                        </form>
+                        <div class="ey-form-item" style="margin-left: 20px;">
+                            <div class="users-form-item-content">
+                                <span class="bt-xin" onclick="archivesQuery();">查询</span>
+                                <span class="bt-xin-no" onclick="archivesQuery('reset');">重置</span>
+                            </div>
+                        </div>
+                        <script type="text/javascript">
+                            function archivesQuery(isReset) {
+                                if (isReset && 'reset' == isReset) {
+                                    window.location.href = "{:url('Archives/index_archives')}";
+                                } else {
+                                    $('#searchForm').submit();
+                                }
+                            }
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th class="sign w40" axis="col0">
+                            <div class="tc"><input type="checkbox" class="checkAll" autocomplete="off"></div>
+                        </th>
+                        <th abbr="article_title" axis="col3" class="w70">
+                            <div class="tc">ID</div>
+                        </th>
+                        {notempty name="$global.web_citysite_open"}
+                        <th abbr="article_title" axis="col3" class="w100">
+                            <div class="tc">区域</div>
+                        </th>
+                        {/notempty}
+                        <th abbr="article_title" axis="col3" class="">
+                            <div style="text-align: left;" class="text-l10">标题</div>
+                        </th>
+                        <!-- <th abbr="article_time" axis="col6" class="w120">
+                            <div class="tc">付费限制</div>
+                        </th> -->
+                        <th abbr="article_time" axis="col6" class="w120">
+                            <div class="tc">栏目</div>
+                        </th>
+                        <th abbr="article_time" axis="col6" class="w60">
+                            <div class="tc sort_style"><a href="{:getArchivesSortUrl('arcrank')}">审核&nbsp;<i {eq name='$Request.param.orderby' value='arcrank'}{eq name='$Request.param.orderway' value='asc'}class="asc"{else /}class="desc"{/eq}{/eq}></i></a></div>
+                        </th>
+                        <th abbr="article_time" axis="col6" class="w60">
+                            <div class="tc">点击</div>
+                        </th>
+                        {if !empty($arctype_info) && $arctype_info['current_channel'] == 4}
+                        <th abbr="download_time" axis="col6" class="w60">
+                            <div class="tc">下载</div>
+                        </th>
+                        {/if}
+                        <th abbr="article_time" axis="col6" class="w150">
+                            <div class="tc">发布时间</div>
+                        </th>
+                        <th axis="col1" class="w160">
+                            <div class="tc">操作</div>
+                        </th>
+                        <th abbr="article_time" axis="col6" class="w60">
+                            <div class="tc sort_style"><a href="{:getArchivesSortUrl('sort_order')}">排序&nbsp;<i {eq name='$Request.param.orderby' value='sort_order'}{eq name='$Request.param.orderway' value='asc'}class="asc"{else /}class="desc"{/eq}{/eq}></i></a></div>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <table style="width: 100%;">
+                    <tbody>
+                    {empty name="list"}
+                        <tr>
+                            <td class="no-data" align="center" axis="col0" colspan="50">
+                                <div class="no_row">
+                                    <div class="no_pic"><img src="__SKIN__/images/null-data.png"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    {else/}
+                        {foreach name="list" item="vo" key="k" }
+                        <tr>
+                            <td class="sign">
+                                <div id="aid_{$vo.aid}" data-typeid="{$vo.typeid}" class="tc w40"><input type="checkbox" name="ids[]" value="{$vo.aid}" autocomplete="off"></div>
+                            </td>
+                           
+                            <td class="sort">
+                                <div class="tc w70">
+                                    {$vo.aid}
+                                </div>
+                            </td>
+                            {notempty name="$global.web_citysite_open"}
+                            <td class="">
+                                <div class="tc w100">
+                                    {$vo.areas|default=''}
+                                </div>
+                            </td>
+                            {/notempty}
+                            <td class="" style="width: 100%;">
+                                <div class="tl pdl10" >
+                                    {notempty name="$vo.is_litpic"}
+                                        <i class="fa fa-picture-o color_z" onmouseover="layer_tips=layer.tips('<img src={$vo.litpic} class=\'layer_tips_img\'>',this,{tips: [3, '#fff'],skin:'layer-yourskin-mt0'});" onmouseout="layer.close(layer_tips);"></i>
+                                    {/notempty}
+                                    {eq name="'Archives@edit'|is_check_access" value="1"}
+                                        {if condition="empty($channelRow[$vo['channel']]['ifsystem'])"}
+                                            <a href="{:url('Custom/edit',array('id'=>$vo['aid'],'typeid'=>$Request.param.typeid, 'channel'=>$vo.channel, 'callback_url'=>$callback_url))}" style="{eq name="vo.is_b" value="1"} font-weight: bold;{/eq}">{$vo.title}</a>
+                                        {elseif condition="'Product' == $channelRow[$vo['channel']]['ctl_name']" /}
+                                            <a href="JavaScript:void(0);" data-url="{:url('Product/edit', ['id'=>$vo['aid'], 'typeid'=>$Request.param.typeid, 'callback_url'=>$callback_url])}" onclick="productEdit(this, {$shopOpen|default='0'}, {$vo.aid});" style="{eq name="vo.is_b" value="1"} font-weight: bold; {/eq}">{$vo.title}</a>
+                                        {else/}
+                                            <a href="{:url($channelRow[$vo['channel']]['ctl_name'].'/edit',array('id'=>$vo['aid'],'typeid'=>$Request.param.typeid, 'callback_url'=>$callback_url))}" style="{eq name="vo.is_b" value="1"} font-weight: bold; {/eq}">{$vo.title}</a>
+                                        {/if}
+                                    {else /}
+                                    {$vo.title}
+                                    {/eq}
+                                    {assign name='showArcFlagData' value='$vo|showArchivesFlagStr'}
+                                    {volist name='$showArcFlagData' id="vo1"}
+                                        {eq name='$i' value='1'}<span style="color: red;">[{/eq}
+                                        <i style="font-size: 12px;">{$vo1['small_name']}</i>
+                                        {eq name='$i' value='$showArcFlagData|count'}]</span>{/eq}
+                                    {/volist}
+                                </div>
+                            </td>
+                            <!-- <td class="">
+                                <div class="w120 tc">
+                                    <span style="display: block;">高级会员</span>
+                                    <span class="red">￥10.00</span>
+                                </div>
+                            </td> -->
+                            <td class="">
+                                <div class="w120 tc ellipsis"><a href="{:url('Archives/index_archives', array('typeid'=>$vo['typeid']))}" title="{$vo.typename}">{$vo.typename|default='<i class="red">数据出错！</i>'}</a></div>
+                            </td>
+                            <td>
+                                <div class="tc w60">
+                                    {if condition="$vo['arcrank'] eq -1"}
+                                        <span class="no" {eq name="$Think.const.CONTROLLER_NAME.'@edit'|is_check_access" value="1"} data-typeid="{$vo.typeid}" data-seo_pseudo="{$seo_pseudo|default='1'}" onClick="changeTableVal('archives','aid','{$vo.aid}','arcrank',this);" {/eq} ><i class="fa fa-ban"></i>否</span>
+                                    {else /}
+                                        <span class="yes" {eq name="$Think.const.CONTROLLER_NAME.'@edit'|is_check_access" value="1"} data-typeid="{$vo.typeid}" data-seo_pseudo="{$seo_pseudo|default='1'}" onClick="changeTableVal('archives','aid','{$vo.aid}','arcrank',this);" {/eq} ><i class="fa fa-check-circle"></i>是</span>
+                                    {/if}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="tc w60">
+                                    {$vo.click}
+                                </div>
+                            </td>
+                            {if !empty($arctype_info) && $arctype_info['current_channel'] == 4}
+                            <td>
+                                <div class="tc w60">
+                                    {$vo.downcount}
+                                </div>
+                            </td>
+                            {/if}
+                            <td>
+                                <div class="w150 tc">
+                                    {$vo.add_time|date='Y-m-d H:i:s',###}
+                                </div>
+                            </td>
+                            <td class="operation">
+                                <div class="w160 tc">
+                                    {eq name="'Archives@edit'|is_check_access" value="1"}
+                                        {if condition="empty($channelRow[$vo['channel']]['ifsystem'])"}
+                                        <a href="{:url('Custom/edit',array('id'=>$vo['aid'],'typeid'=>$Request.param.typeid, 'channel'=>$vo.channel, 'callback_url'=>$callback_url))}" class="btn blue">编辑</a>
+                                        {elseif condition="'Product' == $channelRow[$vo['channel']]['ctl_name']" /}
+                                        <a href="JavaScript:void(0);" data-url="{:url('Product/edit', ['id'=>$vo['aid'], 'typeid'=>$Request.param.typeid, 'callback_url'=>$callback_url])}" onclick="productEdit(this, {$shopOpen|default='0'}, {$vo.aid});" class="btn blue">编辑</a>
+                                        {else/}
+                                        <a href="{:url($channelRow[$vo['channel']]['ctl_name'].'/edit',array('id'=>$vo['aid'], 'typeid'=>$Request.param.typeid, 'callback_url'=>$callback_url))}" class="btn blue">编辑</a>
+                                        {/if}
+                                        <i></i>
+                                    {/eq}
+                                    {eq name="'Archives@del'|is_check_access" value="1"}
+                                        <a class="btn red"  href="javascript:void(0);" data-url="{:url('Archives/del')}" data-id="{$vo.aid}" {eq name="$global['web_recycle_switch']" value='1'} data-deltype="del" {else /} data-deltype="pseudo" {/eq} onClick="delfun(this);">删除</a>
+                                        <i></i>
+                                    {/eq}
+                                    <a href="{$vo.arcurl}" target="_blank" class="btn blue">浏览</a>
+                                </div>
+                            </td>
+                             <td class="sort">
+                                <div class="w60 tc">
+                                    {eq name="'Archives@edit'|is_check_access" value="1"}
+                                    <input type="text" onkeyup="this.value=this.value.replace(/[^\d]/g,'');" onpaste="this.value=this.value.replace(/[^\d]/g,'')" onChange="changeTableVal('archives','aid','{$vo.aid}','sort_order',this);"  size="4"  value="{$vo.sort_order}" />
+                                    {else /}
+                                    {$vo.sort_order}
+                                    {/eq}
+                                </div>
+                            </td>
+                            
+                        </tr>
+                        {/foreach}
+                    {/empty}
+                    </tbody>
+                </table>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        {notempty name="list"}
+        <div class="footer-oper">
+            <span class="ml15">
+                <input type="checkbox" class="checkAll" autocomplete="off">
+            </span>
+            <div class="nav-dropup">
+                <button class="layui-btn layui-btn-primary dropdown-bt">批量操作<i class="layui-icon layui-icon-up"></i></button>
+                <div class="dropdown-menus" style="display:none; {if condition='0 < $pager->totalRows && ($pager->totalRows < 4 || $pager->listRows < 4)'}top:28px;bottom:unset;border-bottom:1px solid rgba(0,0,0,.15);border-top:none; min-height: 250px;{/if}">
+                    {eq name="'Archives@batch_attr'|is_check_access" value="1"}
+                    <a href="javascript:void(0);" onclick="batch_attr(this, 'ids', '批量新增属性');" data-url="{:url('Archives/batch_attr', ['opt'=>'add'])}">新增属性</a>
+                    <a href="javascript:void(0);" onclick="batch_attr(this, 'ids', '批量删除属性');" data-url="{:url('Archives/batch_attr', ['opt'=>'del'])}">删除属性</a>
+                    <hr class="layui-bg-gray">
+                    {/eq}
+                    {eq name="'Archives@batch_copy'|is_check_access" value="1"}
+                    <a href="javascript:void(0);" onclick="func_batch_copy(this, 'ids');" data-url="{:url('Archives/batch_copy', array('typeid'=>$Request.param.typeid))}">复制文档</a>
+                    {/eq}
+                    {eq name="'Archives@move'|is_check_access" value="1"}
+                    <a href="javascript:void(0);" onclick="func_move(this, 'ids');" data-url="{:url('Archives/move', array('typeid'=>$Request.param.typeid))}">移动文档</a>
+                    {/eq}
+                    {eq name="'Archives@check'|is_check_access" value="1"}
+                    <hr class="layui-bg-gray">
+                    <a href="javascript:void(0);" onclick="batch_check(this, 'ids');" data-type="check" data-url="{:url('Archives/check')}">审核文档</a>
+                    <a href="javascript:void(0);" onclick="batch_check(this, 'ids');" data-type="uncheck" data-url="{:url('Archives/uncheck')}">取消审核</a>
+                    {/eq}
+                </div>
+            </div>
+            {eq name="'Archives@del'|is_check_access" value="1"}
+            <a href="javascript:void(0);" onclick="batch_del(this, 'ids');" data-url="{:url('Archives/del')}" {eq name="$global['web_recycle_switch']" value='1'} data-deltype="del" {else /} data-deltype="pseudo" {/eq} class="layui-btn layui-btn-primary" title="删除文档">删除文档</a>
+            {/eq}
+            {eq name="'Archives@index_draft'|is_check_access" value="1"}
+            <a data-url="{:url('Archives/index_draft')}" onclick="recycleBin(this)" href="javascript:;" class="layui-btn layui-btn-primary" title="待审核文档">待审核文档</a>
+            {/eq}
+            {eq name="'RecycleBin@archives_index'|is_check_access" value="1"}
+                {neq name="$global['web_recycle_switch']" value='1'}
+                    <a data-url="{:url('RecycleBin/archives_index')}" onclick="recycleBin(this)" href="javascript:;" class="layui-btn layui-btn-primary" title="回收站">回收站</a>
+                {/neq}
+            {/eq}
+            {include file="public/page" /}
+        </div>
+        {/notempty}
+    </div>
+</div>
+<script type="text/javascript">
+    function recycleBin(obj) {
+        var url = $(obj).data("url");
+        parent.location = url;
+    }
+    $(function(){
+        $('input[name*=ids]').click(function(){
+            if ($('input[name*=ids]').length == $('input[name*=ids]:checked').length) {
+                $('.checkAll').prop('checked','checked');
+            } else {
+                $('.checkAll').prop('checked', false);
+            }
+        });
+        $('input[type=checkbox].checkAll').click(function(){
+            $('input[type=checkbox]').prop('checked',this.checked);
+        });
+    });
+    
+    $(document).ready(function(){
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+
+        // 点击刷新数据
+        $('.fa-refresh').click(function(){
+            location.href = location.href;
+        });
+
+        // 选择栏目检索出相应文档列表
+        $('#typeid').change(function(){
+          $('#searchForm').submit();
+        });
+
+        // 批量操作
+        $(".dropdown-bt").click(function(){
+            $(".dropdown-menus").slideToggle(200);
+            event.stopPropagation();
+        })
+        $(document).click(function(){
+            $(".dropdown-menus").slideUp(200);
+            event.stopPropagation();
+        })
+    });
+
+    var aids = '';
+    function func_move(obj, name)
+    {
+        var a = [];
+        var k = 0;
+        aids = '';
+        $('input[name^='+name+']').each(function(i,o){
+            if($(o).is(':checked')){
+                a.push($(o).val());
+                if (k > 0) {
+                    aids += ',';
+                }
+                aids += $(o).val();
+                k++;
+            }
+        })
+        if(a.length == 0){
+            layer.alert('请至少选择一项', {
+                shade: layer_shade,
+                area: ['480px', '190px'],
+                move: false,
+                title: '提示',
+                btnAlign:'r',
+                closeBtn: 3,
+                success: function () {
+                      $(".layui-layer-content").css('text-align', 'left');
+                  }
+            });
+            return;
+        }
+
+        var url = $(obj).attr('data-url');
+        //iframe窗
+        layer.open({
+            type: 2,
+            title: '移动文档',
+            fixed: true, //不固定
+            shadeClose: false,
+            shade: layer_shade,
+            maxmin: false, //开启最大化最小化按钮
+            area: ['480px', '360px'],
+            content: url
+        });
+    }
+</script>
+<!-- 日期联动选择js文件 start -->
+<script type="text/javascript" src="__PUBLIC__/static/common/js/ey_laydate_time_linkage.js?v={$version}"></script>
+<!-- 日期联动选择js文件 end -->
+{include file="public/footer" /}

@@ -1,0 +1,21 @@
+<?php
+//000000000000
+ exit();?>
+a:50:{s:12:"web_keywords";s:0:"";s:8:"web_name";s:19:"易优Cms-演示站";s:8:"web_logo";s:69:"/public/upload/system/2018/05/24/8c675d3dae162ebc1936f3ab43d58960.png";s:7:"web_ico";s:12:"/favicon.ico";s:12:"web_basehost";s:21:"http://127.0.0.1:8080";s:15:"web_description";s:0:"";s:13:"web_recordnum";s:20:"琼ICP备xxxxxxxx号";s:13:"web_copyright";s:54:"Copyright © 2012-2018 EYOUCMS. 易优CMS 版权所有";s:16:"web_thirdcode_pc";s:0:"";s:17:"web_thirdcode_wap";s:0:"";s:9:"web_title";s:35:"易优CMS -  Powered by Eyoucms.com";s:15:"web_authortoken";s:0:"";s:11:"web_cmspath";s:0:"";s:15:"web_sqldatapath";s:34:"/data/sqldata_TDJpCpx4FjPkH2SGKoEL";s:10:"web_cmsurl";s:0:"";s:16:"web_templets_dir";s:15:"/template/muban";s:14:"web_templeturl";s:15:"/template/muban";s:15:"web_templets_pc";s:18:"/template/muban/pc";s:14:"web_templets_m";s:22:"/template/muban/mobile";s:11:"web_eyoucms";s:22:"http://www.eyoucms.com";s:10:"web_status";s:1:"0";s:18:"web_is_authortoken";s:1:"0";s:17:"web_adminbasefile";s:10:"/login.php";s:11:"web_cmsmode";s:1:"2";s:24:"web_htmlcache_expires_in";s:4:"7200";s:22:"web_show_popup_upgrade";s:1:"2";s:16:"web_weapp_switch";s:1:"1";s:22:"web_mobile_domain_open";s:1:"0";s:12:"web_is_https";s:1:"0";s:16:"web_stypeid_open";s:1:"0";s:18:"absolute_path_open";s:1:"0";s:13:"web_tpl_theme";s:5:"muban";s:17:"web_anti_brushing";s:1:"1";s:15:"web_theme_color";s:7:"#3398cc";s:16:"web_assist_color";s:7:"#2189be";s:14:"web_loginbgimg";s:40:"/public/static/admin/images/login-bg.jpg";s:13:"web_adminlogo";s:34:"/public/static/admin/logo/logo.png";s:13:"web_loginlogo";s:41:"/public/static/admin/login/login-logo.png";s:17:"web_citysite_open";s:1:"0";s:17:"web_theme_styleid";s:3:"100";s:14:"web_status_tpl";s:17:"public/close.html";s:18:"web_recycle_switch";s:1:"0";s:14:"web_xss_filter";s:0:"";s:13:"web_xss_words";s:141:"union
+delete
+outfile
+char
+concat
+truncate
+insert
+revoke
+grant
+replace
+rename
+declare
+exec
+delimiter
+phar
+eval
+onerror
+script";s:14:"web_anti_words";s:2:"wd";s:23:"web_theme_login_tplname";s:0:"";s:20:"web_loginbgimg_model";s:1:"1";s:21:"web_theme_color_model";s:1:"1";s:25:"web_theme_welcome_tplname";s:0:"";s:22:"web_theme_style_uptime";s:10:"1778568727";}

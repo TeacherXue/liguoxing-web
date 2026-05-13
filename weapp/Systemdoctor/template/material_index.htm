@@ -1,0 +1,1045 @@
+{include file="header.htm" /}
+<link href="__WEAPP_TEMPLATE__/skin/css/material_index.css?v={$weappInfo.version|default='v1.0.0'}" rel="stylesheet" type="text/css">
+<body style="background-color: #FFF; overflow: auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page material-page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <a class="back_xin" href="{:weapp_url('Systemdoctor/Systemdoctor/index')}" title="返回列表"><i class="iconfont e-fanhui"></i></a>
+            <div class="subject">
+                <h3>素材管理</h3>
+            </div>
+            <ul class="tab-base nc-row">
+                <li>
+                    <a href="{:weapp_url('Systemdoctor/Systemdoctor/material_index')}" class="tab current"><span>图片</span></a>
+                </li>
+                <li>
+                    <a href="{:weapp_url('Systemdoctor/Systemdoctor/material_video_index')}" class="tab"><span>视频</span></a>
+                </li>
+                <li>
+                    <a href="{:weapp_url('Systemdoctor/Systemdoctor/material_file_index')}" class="tab"><span>附件</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="flexigrid" style="border:none;box-shadow:none;background:transparent;">
+        <div class="material-manager">
+            <div class="material-header">
+              
+                <div class="material-actions">
+                    <input type="file" id="uploadFile" accept="image/*" multiple style="display:none;">
+                    <a href="javascript:void(0);" class="btn-link btn-upload" id="uploadTrigger">
+                        <i class="fa fa-upload"></i>上传图片
+                    </a>
+                    <a href="javascript:void(0);" class="btn-link light" onclick="showAddGroupDialog();">
+                        <i class="fa fa-plus-circle"></i>添加分组
+                    </a>
+                </div>
+                
+                <div class="material-search">
+                    <form method="get" action="javascript:void(0);" onsubmit="return false;" style="display:flex;border:1px solid #e3e7f3;border-radius:6px;overflow:hidden;">
+                        <input type="hidden" name="group_id" id="searchGroupId" value="{$current_group_id|default=0}">
+                        <input type="text" name="keyword" id="searchKeyword" placeholder="请输入图片名称" value="{$current_keyword|default=''}">
+                        <button type="button" id="searchBtn"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="material-body">
+                <div class="material-sidebar" id="materialSidebar">
+                    <div class="sidebar-section">
+                        <ul class="sidebar-list">
+                            <!-- <li class="{eq name='current_group_id' value='-1'}active{/eq}" data-group-id="-1" data-group-name="全部素材">
+                                <a href="{:weapp_url('Systemdoctor/Systemdoctor/material_index', ['group_id' => -1])}">
+                                    <span>全部素材</span>
+                                    <span class="sidebar-count" id="allCount">{$group_list.total_count|default=0}</span>
+                                </a>
+                            </li> -->
+                            <li class="{eq name='current_group_id' value='0'}active{/eq}" data-group-id="0" data-group-name="默认分组">
+                                <a href="{:weapp_url('Systemdoctor/Systemdoctor/material_index', ['group_id' => 0])}">
+                                    <span>默认分组</span>
+                                    <span class="sidebar-count" id="defaultCount">{$group_list.default_count|default=0}</span>
+                                </a>
+                            </li>
+                            {volist name="group_list.list" id="vo"}
+                            <li class="{eq name='current_group_id' value='$vo.id'}active{/eq}" data-group-id="{$vo.id}" data-group-name="{$vo.name|default=''}">
+                                <a href="{:weapp_url('Systemdoctor/Systemdoctor/material_index', ['group_id' => $vo.id])}">
+                                    <span>{$vo.name}</span>
+                                    <span class="sidebar-count">{$vo.count|default=0}</span>
+                                </a>
+                            </li>
+                            {/volist}
+                        </ul>
+                    </div>
+                </div>
+                <div class="material-content">
+                    <div class="material-toolbar group-toolbar">
+                        <div class="group-toolbar-display" id="groupToolbarDisplay">
+                            <span class="group-toolbar-name" id="groupToolbarName">-</span>
+                            <span class="group-toolbar-split">|</span>
+                            <button type="button" class="btn-link" id="groupToolbarEditBtn">编辑</button>
+                        </div>
+                        <div class="group-toolbar-manage hidden" id="groupToolbarManage">
+                            <span class="group-toolbar-name" id="groupToolbarNameEditing">-</span>
+                            <span class="group-toolbar-split">|</span>
+                            <button type="button" class="btn-link" id="groupToolbarDoneBtn">完成</button>
+                            <button type="button" class="btn-link" id="groupToolbarRenameBtn">编辑分组</button>
+                            <button type="button" class="btn-link text-danger" id="groupToolbarDeleteBtn">删除分组</button>
+                        </div>
+                    </div>
+                    <div class="material-grid material-pane active" id="materialList">
+                        {volist name="material_list" id="vo"}
+                        {php}
+                            $fileName = isset($vo['file_name']) ? $vo['file_name'] : '';
+                            $shortName = mb_strlen($fileName) > 26 ? mb_substr($fileName, 0, 26) . '...' : $fileName;
+                        {/php}
+                        <div class="material-card" data-id="{$vo.id}">
+                            <label class="material-select hidden">
+                                <input type="checkbox" class="material-checkbox" value="{$vo.id}">
+                                <span></span>
+                            </label>
+                            <div class="material-thumb">
+                                {php}
+                                    $version = isset($vo['update_time']) && !empty($vo['update_time']) ? $vo['update_time'] : (isset($vo['add_time']) ? $vo['add_time'] : time());
+                                    $fileUrl = isset($vo['full_url']) ? $vo['full_url'] : $vo['file_path'];
+                                    $imgSrc  = $fileUrl . (strpos($fileUrl, '?') !== false ? '&' : '?') . 'v=' . $version;
+                                {/php}
+                                <img src="{$imgSrc}" alt="{$vo.file_name}" data-image-src="{$imgSrc}">
+                            </div>
+                            <div class="material-meta">
+                                <p>{$shortName}</p>
+                                <span>{$vo.width|default=0} × {$vo.height|default=0}</span>
+                            </div>
+                            <div class="material-card-actions">
+                                {if condition="is_http_url($vo.image_url)" /}
+                                <button type="button"  class="disabled" disabled title="云存储图片不可改名">改名</button>
+                                {else /}
+                                <button type="button" onclick="renameMaterial({$vo.id}, '{$vo.file_name|addslashes}');">改名</button>
+                                {/if}
+                                <button type="button" onclick="assignMaterialGroup({$vo.id}, {$vo.type_id|default=0});">分组</button>
+                                <button type="button" onclick="getMaterialLink({$vo.id});">链接</button>
+                                {if condition="is_http_url($vo.image_url)" /}
+                                <button type="button" class="disabled" disabled title="云存储图片不可替换">替换</button>
+                                {else /}
+                                <button type="button" onclick="replaceMaterial({$vo.id});">替换</button>
+                                {/if}
+                                <button type="button" onclick="deleteMaterial({$vo.id});" style="color:#ff4757;">删除</button>
+                            </div>
+                        </div>
+                        {/volist}
+                        {empty name="material_list"}
+                        <div class="material-empty" style="grid-column:1/-1;">暂无图片素材</div>
+                        {/empty}
+                    </div>
+                    {notempty name="page"}
+                    <div class="material-pagination" id="materialPagination">
+                        <div class="pagination-actions">
+                            <label class="pagination-select-all">
+                                <input type="checkbox" id="selectAllMaterials">
+                                <span>全选</span>
+                            </label>
+                            <button type="button" id="bulkGroupBtn" class="btn-link" disabled>修改分组</button>
+                            <button type="button" id="bulkDeleteBtn" class="btn-danger" disabled>删除</button>
+                        </div>
+                        <div class="pagination-wrapper">
+                            <div class="pagination-info">
+                                {php}
+                                    $pager = isset($pager) ? $pager : null;
+                                    if ($pager) {
+                                        $count = isset($pager->totalRows) ? $pager->totalRows : 0;
+                                        $limit = isset($pager->listRows) ? $pager->listRows : 30;
+                                        echo '<span>共 <strong>' . $count . '</strong> 条，每页 <strong>' . $limit . '</strong> 条</span>';
+                                    }
+                                {/php}
+                            </div>
+                            <div class="pagination-nav">
+                                {$page}
+                            </div>
+                        </div>
+                    </div>
+                    {/notempty}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 图片查看器弹窗 -->
+<div class="image-viewer-overlay" id="imageViewer">
+    <div class="image-viewer-container">
+        <div class="image-viewer-stage">
+            <div class="image-viewer-close" id="imageViewerClose"></div>
+            <div class="image-viewer-arrow image-viewer-prev" id="imageViewerPrev">
+                <i class="fa fa-angle-left"></i>
+            </div>
+            <div class="image-viewer-arrow image-viewer-next" id="imageViewerNext">
+                <i class="fa fa-angle-right"></i>
+            </div>
+        <img id="imageViewerImg" src="" alt="">
+            <div class="image-viewer-footer">
+                <span class="image-viewer-title" id="imageViewerTitle"></span>
+                <span class="image-viewer-counter" id="imageViewerCounter"></span>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var currentGroupId = parseInt("{$current_group_id|default='0'}", 10);
+    if (isNaN(currentGroupId)) {
+        currentGroupId = 0;
+    }
+    var currentMaterialType = 'image';
+    var currentPage = parseInt("{$Request.param.page|default='1'}", 10) || 1;
+    var currentKeyword = "{$current_keyword|default=''|addslashes}";
+    var paginationData = {
+        count: 0,
+        page: 1,
+        limit: 30,
+        total_page: 1
+    };
+    var materialGroupSource = {:json_encode(isset($group_list['list']) ? $group_list['list'] : [])};
+    var materialGroups = [];
+    var $materialManager = null;
+    var globalGroupEditMode = false; // 全局编辑状态（跨页面记忆）
+    
+    function resetMaterialGroups(list){
+        materialGroups = [{id: 0, name: '默认分组'}];
+        if(list && list.length){
+            list.forEach(function(item){
+                materialGroups.push({
+                    id: item.id,
+                    name: item.name
+                });
+            });
+        }
+    }
+    
+    resetMaterialGroups(materialGroupSource || []);
+    
+    function loadGlobalGroupEditMode(){
+        try{
+            if(window.localStorage){
+                var flag = localStorage.getItem('systemdoctor_material_edit_mode');
+                globalGroupEditMode = (flag === '1');
+            }
+        }catch(e){
+            globalGroupEditMode = false;
+        }
+    }
+    
+    function saveGlobalGroupEditMode(){
+        try{
+            if(window.localStorage){
+                localStorage.setItem('systemdoctor_material_edit_mode', globalGroupEditMode ? '1' : '0');
+            }
+        }catch(e){}
+    }
+    
+        $(document).ready(function(){
+        loadGlobalGroupEditMode();
+        $materialManager = $('.material-manager');
+        // 文件上传
+        $('#uploadTrigger').on('click', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            // 使用原生方法触发，避免 jQuery 事件循环
+            var fileInput = document.getElementById('uploadFile');
+            if(fileInput){
+                fileInput.click();
+            }
+            return false;
+        });
+        $('#uploadFile').on('change', function(e){
+            e.stopPropagation();
+            var files = this.files;
+            if(files.length == 0) return;
+            
+            uploadMaterials(files);
+            // 清空文件选择，允许重复选择同一文件
+            $(this).val('');
+        });
+        
+        // 搜索按钮点击
+        $('#searchBtn').on('click', function(e){
+            e.preventDefault();
+            doSearch();
+        });
+        
+        // 搜索回车
+        $('#searchKeyword').on('keypress', function(e){
+            if(e.which == 13){
+                e.preventDefault();
+                doSearch();
+            }
+        });
+        
+        // 分组信息条
+        renderGroupToolbar();
+        // 根据全局状态恢复编辑/完成模式
+        if(globalGroupEditMode){
+            toggleGroupManageMode(true);
+        }else{
+            toggleGroupManageMode(false);
+        }
+        $('#groupToolbarEditBtn').on('click', function(e){
+            e.preventDefault();
+            // 编辑按钮始终可用，进入编辑模式并记住状态
+            globalGroupEditMode = true;
+            saveGlobalGroupEditMode();
+            toggleGroupManageMode(true);
+        });
+        $('#groupToolbarDoneBtn').on('click', function(e){
+            e.preventDefault();
+            // 退出编辑模式并清除全局状态
+            globalGroupEditMode = false;
+            saveGlobalGroupEditMode();
+            toggleGroupManageMode(false);
+        });
+        $('#groupToolbarRenameBtn').on('click', function(e){
+            e.preventDefault();
+            if($(this).prop('disabled')) return;
+            editCurrentGroup();
+        });
+        $('#groupToolbarDeleteBtn').on('click', function(e){
+            e.preventDefault();
+            if($(this).prop('disabled')) return;
+            deleteCurrentGroup();
+        });
+        
+        // 图片查看器
+        initImageViewer();
+        
+        updateSelectAllState();
+        updateBulkDeleteState();
+        
+        $('#selectAllMaterials').on('change', function(){
+            var checked = $(this).prop('checked');
+            toggleSelectionMode(checked);
+            $('.material-checkbox').prop('checked', checked);
+            updateBulkDeleteState();
+        });
+        
+        $('#bulkGroupBtn').on('click', function(){
+            var ids = getSelectedMaterialIds();
+            if(ids.length === 0){
+                layer.msg('请选择要修改分组的素材', {time: 1000});
+                return;
+            }
+            bulkAssignMaterialGroup(ids);
+        });
+        
+        $('#bulkDeleteBtn').on('click', function(){
+            var ids = getSelectedMaterialIds();
+            if(ids.length === 0){
+                layer.msg('请选择要删除的素材', {time: 1000});
+                return;
+            }
+            layer.confirm('确认要删除选中的素材吗？', {
+                title: '提示',
+                btn: ['确定', '取消']
+            }, function(index){
+                layer_loading('删除中...');
+                deleteMaterialsSequential(ids.slice(), index);
+            });
+        });
+    });
+    
+    $(document).on('change', '.material-checkbox', function(){
+        updateSelectAllState();
+        updateBulkDeleteState();
+    });
+    
+    // 搜索功能（全局函数）
+    function doSearch(){
+        var keyword = $('#searchKeyword').val();
+        if(keyword){
+            keyword = keyword.trim();
+        }
+        var groupId = $('#searchGroupId').val() || 0;
+        
+        var url = "{:weapp_url('Systemdoctor/Systemdoctor/material_index')}";
+        var params = [];
+        if(parseInt(groupId) >= 0){
+            params.push('group_id=' + encodeURIComponent(groupId));
+        }
+        if(keyword){
+            params.push('keyword=' + encodeURIComponent(keyword));
+        }
+        if(params.length > 0){
+            var separator = url.indexOf('?') >= 0 ? '&' : '?';
+            url += separator + params.join('&');
+        }
+        
+        window.location.href = url;
+    }
+    
+    // 搜索素材（保留旧接口）
+    function searchMaterial(){
+        doSearch();
+    }
+    
+    function getCurrentGroupInfo(){
+        var groupId = parseInt(currentGroupId, 10);
+        if(isNaN(groupId)){
+            groupId = 0;
+        }
+        var info = {
+            id: groupId,
+            name: '',
+            manageable: groupId > 0
+        };
+        if(groupId === -1){
+            info.name = '全部素材';
+            info.manageable = false;
+            return info;
+        }
+        if(groupId === 0){
+            info.name = '默认分组';
+            info.manageable = false;
+            return info;
+        }
+        var targetName = '';
+        for(var i = 0; i < materialGroups.length; i++){
+            var itemId = parseInt(materialGroups[i].id, 10);
+            if(itemId === groupId){
+                targetName = materialGroups[i].name;
+                break;
+            }
+        }
+        info.name = targetName || '未命名分组';
+        return info;
+    }
+    
+    function renderGroupToolbar(){
+        var info = getCurrentGroupInfo();
+        $('#groupToolbarName, #groupToolbarNameEditing').text(info.name);
+        var canManage = info.manageable;
+        // 默认分组也允许进入编辑模式，但不能编辑 / 删除分组
+        $('#groupToolbarEditBtn').prop('disabled', false).removeClass('disabled');
+        $('#groupToolbarRenameBtn, #groupToolbarDeleteBtn').prop('disabled', !canManage).toggleClass('disabled', !canManage);
+    }
+    
+    function toggleGroupManageMode(editing){
+        if(editing){
+            $('#groupToolbarDisplay').addClass('hidden');
+            $('#groupToolbarManage').removeClass('hidden');
+            if($materialManager){
+                $materialManager.addClass('group-edit-mode');
+            }
+        } else {
+            $('#groupToolbarDisplay').removeClass('hidden');
+            $('#groupToolbarManage').addClass('hidden');
+            if($materialManager){
+                $materialManager.removeClass('group-edit-mode');
+            }
+        }
+    }
+    
+    function editCurrentGroup(){
+        var info = getCurrentGroupInfo();
+        if(!info.manageable){
+            return;
+        }
+        layer.prompt({
+            title: '编辑分组',
+            value: info.name,
+            formType: 0
+        }, function(value, index){
+            if(!value || value.trim() === ''){
+                showErrorAlert('分组名称不能为空');
+                return;
+            }
+            var newName = value.trim();
+            if(newName === info.name){
+                layer.close(index);
+                toggleGroupManageMode(false);
+                return;
+            }
+            $.ajax({
+                url: "{:weapp_url('Systemdoctor/Systemdoctor/material_index')}",
+                type: 'POST',
+                data: {
+                    type: 'group_edit',
+                    id: info.id,
+                    name: newName,
+                    material_type: 'image',
+                    _ajax: 1
+                },
+                dataType: 'json',
+                success: function(res){
+                    if(res.code == 1){
+                        layer.close(index);
+                        layer.msg(res.msg, {time: 1000}, function(){
+                            window.location.reload();
+                        });
+                    } else {
+                        showErrorAlert(res.msg || '编辑失败');
+                    }
+                },
+                error: function(){
+                    showErrorAlert('编辑失败');
+                }
+            });
+        });
+    }
+    
+    function deleteCurrentGroup(){
+        var info = getCurrentGroupInfo();
+        if(!info.manageable){
+            return;
+        }
+        layer.confirm('<div style="text-align: left;">仅删除分组，不删除图片，组内图片将自动归入默认分组</div>', {
+            title: '提示',
+            btn: ['确定', '取消']
+        }, function(index){
+            $.ajax({
+                url: "{:weapp_url('Systemdoctor/Systemdoctor/material_index')}",
+                type: 'POST',
+                data: {
+                    type: 'group_delete',
+                    id: info.id,
+                    material_type: 'image',
+                    _ajax: 1
+                },
+                dataType: 'json',
+                success: function(res){
+                    layer.close(index);
+                    if(res.code == 1){
+                        var redirectUrl = "{:weapp_url('Systemdoctor/Systemdoctor/material_index', ['group_id' => 0])}";
+                        layer.msg(res.msg, {time: 1000}, function(){
+                            window.location.href = redirectUrl;
+                        });
+                    } else {
+                        showErrorAlert(res.msg || '删除失败');
+                    }
+                },
+                error: function(){
+                    layer.close(index);
+                    showErrorAlert('删除失败');
+                }
+            });
+        });
+    }
+    
+    function getSelectedMaterialIds(){
+        var ids = [];
+        $('.material-checkbox:checked').each(function(){
+            ids.push($(this).val());
+        });
+        return ids;
+    }
+    
+    function updateSelectAllState(){
+        var total = $('.material-checkbox').length;
+        var checked = $('.material-checkbox:checked').length;
+        $('#selectAllMaterials').prop('checked', total > 0 && total === checked);
+        toggleSelectionMode(checked > 0 || $('#selectAllMaterials').prop('checked'));
+    }
+    
+    function updateBulkDeleteState(){
+        var hasSelected = $('.material-checkbox:checked').length > 0;
+        $('#bulkDeleteBtn').prop('disabled', !hasSelected);
+        $('#bulkGroupBtn').prop('disabled', !hasSelected);
+    }
+    
+    function toggleSelectionMode(show){
+        if(show){
+            $('.material-select').removeClass('hidden');
+        } else {
+            $('.material-select').addClass('hidden');
+            $('.material-checkbox').prop('checked', false);
+        }
+    }
+    
+    function deleteMaterialsSequential(ids, layerIndex){
+        if(ids.length === 0){
+            layer.close(layerIndex);
+            layer.closeAll('loading');
+            layer.msg('删除成功', {time: 1000}, function(){
+                window.location.reload();
+            });
+            return;
+        }
+        var id = ids.shift();
+        $.ajax({
+            url: "{:weapp_url('Systemdoctor/Systemdoctor/material_index')}",
+            type: 'POST',
+            data: {
+                type: 'delete',
+                id: id,
+                _ajax: 1
+            },
+            dataType: 'json',
+            success: function(res){
+                if(res.code == 1){
+                    deleteMaterialsSequential(ids, layerIndex);
+                } else {
+                    layer.close(layerIndex);
+                    layer.closeAll('loading');
+                    showErrorAlert(res.msg);
+                }
+            },
+            error: function(){
+                layer.close(layerIndex);
+                layer.closeAll('loading');
+                showErrorAlert('删除失败');
+            }
+        });
+    }
+    
+    // 上传素材
+    function uploadMaterials(files){
+        var formData = new FormData();
+        formData.append('type', 'upload');
+        var targetGroupId = currentGroupId >= 0 ? currentGroupId : 0;
+        formData.append('group_id', targetGroupId);
+        formData.append('material_type', 'image');
+        formData.append('_ajax', 1);
+        
+        for(var i = 0; i < files.length; i++){
+            formData.append('file', files[i]);
+        }
+        
+        layer_loading('上传中...');
+        $.ajax({
+            url: "{:weapp_url('Systemdoctor/Systemdoctor/material_index')}",
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            success: function(res){
+                layer.closeAll();
+                if(res.code == 1){
+                    layer.msg(res.msg, {time: 1000}, function(){
+                        $('#uploadFile').val('');
+                        window.location.reload();
+                    });
+                } else {
+                    showErrorAlert(res.msg);
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                showErrorAlert('上传失败');
+            }
+        });
+    }
+    
+    // 重命名素材
+    function renameMaterial(id, oldName){
+        layer.prompt({
+            title: '重命名素材',
+            value: oldName.replace(/\.[^/.]+$/, ''),
+            formType: 0
+        }, function(value, index){
+            if(!value || value.trim() == ''){
+                showErrorAlert('名称不能为空');
+                return;
+            }
+            
+            $.ajax({
+                url: "{:weapp_url('Systemdoctor/Systemdoctor/material_index')}",
+                type: 'POST',
+                data: {
+                    type: 'rename',
+                    id: id,
+                    new_name: value.trim(),
+                    _ajax: 1
+                },
+                dataType: 'json',
+                success: function(res){
+                    layer.close(index);
+                    if(res.code == 1){
+                        layer.msg(res.msg, {time: 1000}, function(){
+                            window.location.reload();
+                        });
+                    } else {
+                        showErrorAlert(res.msg);
+                    }
+                }
+            });
+        });
+    }
+    
+    // 获取素材链接
+    function getMaterialLink(id){
+        $.ajax({
+            url: "{:weapp_url('Systemdoctor/Systemdoctor/material_index')}",
+            type: 'POST',
+            data: {
+                type: 'get_link',
+                id: id,
+                _ajax: 1
+            },
+            dataType: 'json',
+            success: function(res){
+                if(res.code == 1){
+                    layer.prompt({
+                        title: '素材链接',
+                        value: res.data.url,
+                        formType: 0,
+                        area: ['820px', 'auto'],
+                        success: function(layero){
+                            layero.find('.layui-layer-btn0').text('复制');
+                            layero.find('.layui-layer-btn1').text('取消');
+                        }
+                    }, function(value, index){
+                        // 复制到剪贴板
+                        var input = document.createElement('input');
+                        input.value = value;
+                        document.body.appendChild(input);
+                        input.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(input);
+                        layer.close(index);
+                        layer.msg('链接已复制到剪贴板', {time: 1000});
+                    });
+                } else {
+                    showErrorAlert(res.msg);
+                }
+            }
+        });
+    }
+    
+    // 替换素材
+    function replaceMaterial(id){
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'image/*';
+        input.onchange = function(e){
+            var file = e.target.files[0];
+            if(!file) return;
+            
+            var formData = new FormData();
+            formData.append('type', 'replace');
+            formData.append('id', id);
+            formData.append('file', file);
+            formData.append('material_type', 'image');
+            formData.append('_ajax', 1);
+            
+            layer_loading('替换中...');
+            $.ajax({
+                url: "{:weapp_url('Systemdoctor/Systemdoctor/material_index')}",
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                success: function(res){
+                    layer.closeAll();
+                    if(res.code == 1){
+                        layer.msg(res.msg, {time: 1000}, function(){
+                            window.location.reload();
+                        });
+                    } else {
+                        showErrorAlert(res.msg);
+                    }
+                },
+                error: function(e){
+                    layer.closeAll();
+                    showErrorAlert('替换失败');
+                }
+            });
+        };
+        input.click();
+    }
+    
+    // 删除素材
+    function deleteMaterial(id){
+        layer.confirm('确认要删除这个素材吗？', {
+            title: '提示',
+            btn: ['确定', '取消']
+        }, function(index){
+            $.ajax({
+                url: "{:weapp_url('Systemdoctor/Systemdoctor/material_index')}",
+                type: 'POST',
+                data: {
+                    type: 'delete',
+                    id: id,
+                    _ajax: 1
+                },
+                dataType: 'json',
+                success: function(res){
+                    layer.close(index);
+                    if(res.code == 1){
+                        layer.msg(res.msg, {time: 1000}, function(){
+                            window.location.reload();
+                        });
+                    } else {
+                        showErrorAlert(res.msg);
+                    }
+                }
+            });
+        });
+    }
+    
+    // 显示添加分组对话框
+    function showAddGroupDialog(){
+        layer.prompt({
+            title: '添加分组',
+            formType: 0
+        }, function(value, index){
+            if(!value || value.trim() == ''){
+                showErrorAlert('分组名称不能为空');
+                return;
+            }
+            
+            $.ajax({
+                url: "{:weapp_url('Systemdoctor/Systemdoctor/material_index')}",
+                type: 'POST',
+                    data: {
+                        type: 'group_add',
+                        name: value.trim(),
+                        material_type: 'image',
+                        _ajax: 1
+                    },
+                dataType: 'json',
+                success: function(res){
+                    layer.close(index);
+                    if(res.code == 1){
+                        layer.msg(res.msg, {time: 1000}, function(){
+                            window.location.reload();
+                        });
+                    } else {
+                        showErrorAlert(res.msg);
+                    }
+                }
+            });
+        });
+    }
+    
+    // 批量分配素材到分组
+    function bulkAssignMaterialGroup(ids){
+        if(!materialGroups.length){
+            showErrorAlert('暂无可用分组');
+            return;
+        }
+        var optionsHtml = '';
+        materialGroups.forEach(function(group){
+            optionsHtml += '<option value="' + group.id + '">' + group.name + '</option>';
+        });
+        var content = '<div class="material-group-dialog" style="padding:20px 30px;">' +
+            '<label style="display:block;margin-bottom:10px;color:#555;">选择分组（将移动 ' + ids.length + ' 张图片）</label>' +
+            '<select id="materialGroupSelect" style="width:100%;padding:6px 10px;border:1px solid #dcdfe6;border-radius:4px;">' +
+            optionsHtml +
+            '</select>' +
+            '</div>';
+        
+        layer.open({
+            type: 1,
+            title: '批量修改分组',
+            area: ['360px', '220px'],
+            content: content,
+            btn: ['确定', '取消'],
+            yes: function(index){
+                var targetGroupId = $('#materialGroupSelect').val();
+                moveMaterialsSequential(ids.slice(), targetGroupId, index);
+            }
+        });
+    }
+    
+    // 批量移动素材到分组（顺序执行）
+    function moveMaterialsSequential(ids, targetGroupId, layerIndex){
+        if(ids.length === 0){
+            layer.close(layerIndex);
+            layer.msg('修改分组成功', {time: 1000}, function(){
+                window.location.reload();
+            });
+            return;
+        }
+        var id = ids.shift();
+        $.ajax({
+            url: "{:weapp_url('Systemdoctor/Systemdoctor/material_index')}",
+            type: 'POST',
+            data: {
+                type: 'group_move',
+                id: id,
+                group_id: targetGroupId,
+                material_type: 'image',
+                _ajax: 1
+            },
+            dataType: 'json',
+            success: function(res){
+                if(res.code == 1){
+                    moveMaterialsSequential(ids, targetGroupId, layerIndex);
+                } else {
+                    layer.close(layerIndex);
+                    showErrorAlert(res.msg || '修改分组失败');
+                }
+            },
+            error: function(){
+                layer.close(layerIndex);
+                showErrorAlert('修改分组失败');
+            }
+        });
+    }
+    
+    // 分配素材到分组（单个）
+    function assignMaterialGroup(id, currentTypeId){
+        if(!materialGroups.length){
+            showErrorAlert('暂无可用分组');
+            return;
+        }
+        var optionsHtml = '';
+        materialGroups.forEach(function(group){
+            var selected = parseInt(group.id, 10) === parseInt(currentTypeId || 0, 10) ? ' selected' : '';
+            optionsHtml += '<option value="' + group.id + '"' + selected + '>' + group.name + '</option>';
+        });
+        var content = '<div class="material-group-dialog" style="padding:20px 30px;">' +
+            '<label style="display:block;margin-bottom:10px;color:#555;">选择分组</label>' +
+            '<select id="materialGroupSelect" style="width:100%;padding:6px 10px;border:1px solid #dcdfe6;border-radius:4px;">' +
+            optionsHtml +
+            '</select>' +
+            '</div>';
+        
+        layer.open({
+            type: 1,
+            title: '指定分组',
+            area: ['360px', '220px'],
+            content: content,
+            btn: ['确定', '取消'],
+            yes: function(index){
+                var targetGroupId = $('#materialGroupSelect').val();
+                $.ajax({
+                    url: "{:weapp_url('Systemdoctor/Systemdoctor/material_index')}",
+                    type: 'POST',
+                    data: {
+                        type: 'group_move',
+                        id: id,
+                        group_id: targetGroupId,
+                        material_type: 'image',
+                        _ajax: 1
+                    },
+                    dataType: 'json',
+                    success: function(res){
+                        if(res.code == 1){
+                            layer.close(index);
+                            layer.msg(res.msg, {time: 1000}, function(){
+                                window.location.reload();
+                            });
+                        } else {
+                            showErrorAlert(res.msg);
+                        }
+                    }
+                });
+            }
+        });
+    }
+    
+    // 初始化图片查看器（支持上下张切换）
+    function initImageViewer(){
+        var $overlay   = $('#imageViewer');
+        var $img       = $('#imageViewerImg');
+        var $closeBtn  = $('#imageViewerClose');
+        var $prevBtn   = $('#imageViewerPrev');
+        var $nextBtn   = $('#imageViewerNext');
+        var $title     = $('#imageViewerTitle');
+        var $counter   = $('#imageViewerCounter');
+        var raf        = window.requestAnimationFrame || function(cb){ return setTimeout(cb, 0); };
+
+        // 确保弹窗直接挂在 body 下，避免被父级 overflow/transform 影响
+        if($overlay.length && !$overlay.parent().is('body')){
+            $('body').append($overlay);
+        }
+        
+        var $images      = null; // 当前列表所有图片
+        var currentIndex = 0;    // 当前索引
+
+        // 切换显示指定索引图片
+        function showImage(index){
+            if(!$images || $images.length === 0){
+                return;
+            }
+
+            var total = $images.length;
+            if(index < 0){
+                index = total - 1;
+            } else if(index >= total){
+                index = 0;
+        }
+            currentIndex = index;
+
+            var $current = $images.eq(currentIndex);
+            var imgSrc   = $current.attr('data-image-src') || $current.attr('src');
+            var name     = $current.attr('alt') || '';
+
+            $img.attr('src', imgSrc);
+            $title.text(name);
+            $counter.text((currentIndex + 1) + ' / ' + total);
+        }
+        
+        // 点击图片打开查看器
+        $(document).on('click', '#materialList .material-thumb img', function(e){
+            e.stopPropagation();
+
+            // 每次打开时，重新收集当前页面的图片列表，保证与最新 DOM 同步
+            $images = $('#materialList .material-thumb img');
+            currentIndex = $images.index(this);
+            if(currentIndex < 0){
+                currentIndex = 0;
+            }
+
+            showImage(currentIndex);
+            raf(function(){
+            $overlay.addClass('active');
+            });
+            $('body').css('overflow', 'hidden');
+        });
+        
+        // 关闭查看器
+        function closeViewer(){
+            $overlay.removeClass('active');
+            $('body').css('overflow', '');
+        }
+        
+        $closeBtn.on('click', function(e){
+            e.stopPropagation();
+            closeViewer();
+        });
+
+        // 上一张
+        $prevBtn.on('click', function(e){
+            e.stopPropagation();
+            if($overlay.hasClass('active')){
+                showImage(currentIndex - 1);
+            }
+        });
+
+        // 下一张
+        $nextBtn.on('click', function(e){
+            e.stopPropagation();
+            if($overlay.hasClass('active')){
+                showImage(currentIndex + 1);
+            }
+        });
+        
+        // 点击背景关闭
+        $overlay.on('click', function(e){
+            if($(e.target).hasClass('image-viewer-overlay')){
+                closeViewer();
+            }
+        });
+        
+        // 键盘控制：ESC 关闭，左右方向键切换上一张/下一张
+        $(document).on('keydown', function(e){
+            if(!$overlay.hasClass('active')){
+                return;
+            }
+
+            if(e.keyCode === 27){
+                // ESC
+                closeViewer();
+            } else if(e.keyCode === 37){
+                // ← 上一张
+                showImage(currentIndex - 1);
+            } else if(e.keyCode === 39){
+                // → 下一张
+                showImage(currentIndex + 1);
+            }
+        });
+    }
+    
+</script>
+{include file="footer.htm" /}
+

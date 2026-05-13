@@ -1,0 +1,509 @@
+{include file="header.htm" /}
+<style>
+    .doctor-meun{
+        width: 100%;
+        margin: 24px auto 0;
+    }
+    .doctor-section{
+        margin-bottom: 32px;
+        padding: 20px 24px;
+        border: 1px solid #e9edf5;
+        border-radius: 10px;
+        background:#fff;
+        box-shadow:0 10px 30px rgba(15,34,58,0.05);
+    }
+    .doctor-section:last-child{
+        margin-bottom: 0;
+    }
+    .section-head{
+        margin-bottom: 18px;
+    }
+    .section-title{
+        font-size: 18px;
+        font-weight: 600;
+        color:#2a2f45;
+        margin-bottom: 4px;
+    }
+    .section-desc{
+        margin:0;
+        font-size: 13px;
+        color:#6b778c;
+    }
+    .doctor-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+        gap:16px;
+    }
+    .meun-item{
+        border:1px solid #edf1f7;
+        border-radius:8px;
+        padding:16px;
+        background:#fdfefe;
+        box-shadow:0 6px 16px rgba(20,40,80,0.05);
+        min-height:150px;
+        display:flex;
+        flex-direction:column;
+        justify-content:space-between;
+        transition:box-shadow .2s ease,transform .2s ease;
+    }
+    .meun-item:hover{
+        box-shadow:0 16px 30px rgba(20,40,80,0.12);
+        transform:translateY(-2px);
+    }
+    .meun-tit{
+        font-size:15px;
+        font-weight:600;
+        color:#1d2335;
+        margin-bottom:6px;
+    }
+    .meun-desc{
+        font-size:13px;
+        color:#7b859b;
+        line-height:1.5;
+        flex:1;
+    }
+    .meun-tags{
+        margin-bottom:8px;
+    }
+    .meun-tag{
+        display:inline-flex;
+        padding:0 6px;
+        height:20px;
+        line-height:20px;
+        border-radius:10px;
+        font-size:11px;
+        color:#6c5ce7;
+        background:rgba(108,92,231,0.12);
+        margin-right:6px;
+    }
+    .meun-tag-warning{
+        color:#ff9f43;
+        background:rgba(255,159,67,0.12);
+    }
+    .meun-b{
+        margin-top:12px;
+    }
+    .btn-link{
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        padding:6px 12px;
+        border-radius:4px;
+        font-size:13px;
+        color:#fff;
+        background:#31b4e1;
+        border:1px solid #31b4e1;
+        transition:all .2s;
+        text-decoration:none;
+    }
+    .btn-link:hover{
+        background:#1c9ac6;
+        border-color:#1c9ac6;
+        color:#fff;
+    }
+    .btn-link.light{
+        background:#fff;
+        color:#31b4e1;
+    }
+    .btn-upload{
+        position:relative;
+        overflow:hidden;
+    }
+    .btn-upload input{
+        position:absolute;
+        font-size:100px;
+        right:0;
+        top:0;
+        opacity:0;
+        cursor:pointer;
+    }
+</style>
+<body style="background-color: #FFF; overflow: auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    {include file="bar.htm" /}
+    <!-- 操作说明 -->
+    <div id="explanation" class="explanation" style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <li>目前易优系统助手还在逐渐完善中，敬请期待更新……</li>
+            <li>专门诊断各种疑难杂症，部分功能诊断后会自动修复。</li>
+            <li>一些功能需要设置并验证密保问题才可以继续，请前往【功能地图】->【安全中心】设置。</li>
+        </ul>
+    </div>
+    <div class="doctor-meun">
+        <div class="doctor-section">
+            <div class="section-head">
+                <h3 class="section-title">系统诊断</h3>
+            </div>
+            <div class="doctor-grid">
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">校验数据库结构</div>
+                        <p class="meun-desc">检测核心表字段是否缺失或异常，并修正。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="{:weapp_url('Systemdoctor/Database/index')}" class="btn-link">进入检测</a>
+                    </div>
+                </div>
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">检测目录权限</div>
+                        <p class="meun-desc">快速检测目录读写权限是否正常。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="{:weapp_url('Systemdoctor/Systemdoctor/check_permission')}" class="btn-link">开始检测</a>
+                    </div>
+                </div>
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">病毒扫描</div>
+                        <p class="meun-desc">扫描系统文件异常，及时发现潜在威胁。</p>
+                    </div>
+                    <div class="meun-b">
+                        {if condition="$cms_version >= 'v1.5.8'"}
+                            <a href="javascript:void(0);" class="btn-link light" onclick="showErrorAlert('功能已内置，前往【功能地图】->【安全中心】', 2);">查看内置入口</a>
+                        {else /}
+                            <a href="{:weapp_url('Systemdoctor/Systemdoctor/virus_scan')}" class="btn-link">进入扫描</a>
+                        {/if}
+                    </div>
+                </div>
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">木马图片扫描</div>
+                        <p class="meun-desc">识别伪装成图片的可疑脚本。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="{:weapp_url('Systemdoctor/Systemdoctor/virus_upload')}" class="btn-link">进入扫描</a>
+                    </div>
+                </div>
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">上传图片检测木马</div>
+                        <p class="meun-desc">实时阻断上传环节的恶意脚本。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="javascript:void(0);" class="btn-link" data-value="0" onclick="gourl2(this, 3);" {if condition='empty($trojan_horse)'} style="display:none;" {/if}>点击开启</a>
+                        <a href="javascript:void(0);" class="btn-link light" data-value="1" onclick="gourl2(this, 3);" {if condition='!empty($trojan_horse)'} style="display:none;" {/if}>点击关闭</a>
+                    </div>
+                </div>
+                {if condition="$cms_version <= 'v1.7.0'"}
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">无法升级补丁</div>
+                        <p class="meun-desc">修复因权限或文件缺失导致的升级失败。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="{:weapp_url('Systemdoctor/Systemdoctor/upgrade_patch')}" class="btn-link">进入修补</a>
+                    </div>
+                </div>
+                {/if}
+            </div>
+        </div>
+
+        <div class="doctor-section">
+            <div class="section-head">
+                <h3 class="section-title">内容维护</h3>
+            </div>
+            <div class="doctor-grid">
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">文档批量设置</div>
+                        <p class="meun-desc">批量调整发布时间、浏览量、作者、付费模式等属性。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="{:weapp_url('Systemdoctor/Systemdoctor/paymode_index', ['channel'=>1])}" class="btn-link">进入执行</a>
+                    </div>
+                </div>
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">文档链接提取</div>
+                        <p class="meun-desc">快速导出站内文档链接备查或同步。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="{:weapp_url('Systemdoctor/Systemdoctor/extract_archives_index')}" class="btn-link">进入执行</a>
+                    </div>
+                </div>
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">检测重复文档</div>
+                        <p class="meun-desc">定位重复标题文档，保持站点干净整洁。</p>
+                    </div>
+                    <div class="meun-b">
+                         <a href="{:weapp_url('Systemdoctor/Systemdoctor/repeat_archives_index')}" class="btn-link">进入检测</a>
+                    </div>
+                </div>
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">在线模板编辑</div>
+                        <p class="meun-desc">无需本地工具即可微调前端模板。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="javascript:void(0);" data-href="{:weapp_url('Systemdoctor/Systemdoctor/filemanager_index')}" onclick="gourl2(this, 1);" class="btn-link">在线编辑</a>
+                    </div>
+                </div>
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">文件管理器</div>
+                        <p class="meun-desc">浏览、上传、删除站点文件。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="javascript:void(0);" data-href="{:weapp_url('Systemdoctor/Filetool/index')}" onclick="gourl2(this, 1);" class="btn-link">进入管理</a>
+                    </div>
+                </div>
+                {if condition="$cms_version >= 'v1.7.7'"}
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">素材管理</div>
+                        <p class="meun-desc">集中管理站点素材，支持分组、预览、搜索。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="{:weapp_url('Systemdoctor/Systemdoctor/material_index')}" class="btn-link">进入管理</a>
+                    </div>
+                </div>
+                {/if}
+            </div>
+        </div>
+
+        <div class="doctor-section">
+            <div class="section-head">
+                <h3 class="section-title">安全防护</h3>
+            </div>
+            <div class="doctor-grid">
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">特殊字符</div>
+                        <p class="meun-desc">清理内容中可能导致异常的非法字符。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="{:weapp_url('Systemdoctor/Systemdoctor/special_char_index')}" class="btn-link">进入执行</a>
+                    </div>
+                </div>
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">检查bom头部信息</div>
+                        <p class="meun-desc">排查文件 BOM，避免输出乱码及安全隐患。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="{:weapp_url('Systemdoctor/Systemdoctor/bom_index')}" class="btn-link">进入管理</a>
+                    </div>
+                </div>
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">验证码管理</div>
+                        <p class="meun-desc">统一维护前后台验证码样式与策略。</p>
+                    </div>
+                    <div class="meun-b">
+                        {if condition="$cms_version >= 'v1.5.6'"}
+                        <a href="javascript:void(0);" class="btn-link light" onclick="showErrorAlert('功能已内置，前往【功能地图】->【验证码管理】', 2);">查看内置入口</a>
+                        <!--<a href="{:url('Vertify/index')}" class="btn-link">进入管理</a>-->
+                        {else /}
+                            <a href="{:weapp_url('Systemdoctor/Systemdoctor/vertify')}" class="btn-link">进入管理</a>
+                        {/if}
+                    </div>
+                </div>
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">后台操作日志</div>
+                        <p class="meun-desc">追溯管理员行为，快速定位异常操作。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="{:weapp_url('Systemdoctor/Systemdoctor/admin_log')}" class="btn-link">查看日志</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="doctor-section">
+            <div class="section-head">
+                <h3 class="section-title">数据运维工具</h3>
+            </div>
+            <div class="doctor-grid">
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">执行数据库</div>
+                        <p class="meun-desc">上传 SQL 脚本批量执行数据修复。</p>
+                    </div>
+                    <div class="meun-b">
+                        <form class="navbar-form form-inline" action="{:weapp_url('Systemdoctor/Systemdoctor/restoreUpload')}" name="change_System" id="change_System" method="post" enctype="multipart/form-data">
+                            {if condition="0 == $is_security_check"}
+                                <a href="javascript:void(0);" class="btn-link btn-upload">
+                                    <input type="file" name="sqlfile" id="sqlfile" title="请选择…">上传执行 sql 文件
+                                </a>
+                            {else /}
+                                <a href="javascript:void(0);" onclick="gourl2(this, 4);" class="btn-link">上传执行 sql 文件</a>
+                            {/if}
+                        </form>
+                    </div>
+                </div>
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">SQL 命令行</div>
+                        <p class="meun-desc">在线执行少量 SQL，适合快速调试。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="javascript:void(0);" data-href="{:weapp_url('Systemdoctor/Systemdoctor/sql_command')}" onclick="gourl2(this, 1);" class="btn-link">进入执行</a>
+                    </div>
+                </div>
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">重置数据表 ID</div>
+                        <p class="meun-desc">整理自增 ID，保持数据连续性。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="{:weapp_url('Systemdoctor/Systemdoctor/sql_reset')}" class="btn-link">进入重置</a>
+                    </div>
+                </div>
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">数据库内容替换</div>
+                        <p class="meun-desc">支持批量替换指定字段，常用于改域名。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="javascript:void(0);" data-href="{:weapp_url('Systemdoctor/Systemdoctor/data_replace_index')}" onclick="gourl2(this, 1);" class="btn-link">进入执行</a>
+                    </div>
+                </div>
+                <div class="meun-item">
+                    <div>
+                        <div class="meun-tit">数据库优化清理</div>
+                        <p class="meun-desc">一键清理冗余数据，优化表结构。</p>
+                    </div>
+                    <div class="meun-b">
+                        <a href="javascript:void(0);" data-href="{:weapp_url('Systemdoctor/Systemdoctor/db_optimize_index')}" onclick="gourl2(this, 1);" class="btn-link">进入执行</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    var is_security_check = parseInt('{$is_security_check|default=0}', 10) || 0;
+    var security_ask_open = parseInt('{$security_ask_open|default=0}', 10) || 0;
+    
+    $('#sqlfile').change(function(){
+        restoreUpload();
+    });
+
+    //打开链接
+    function gourl2(obj, type){
+        if (1 == is_security_check && 0 == security_ask_open) {
+            showConfirm('需要设置密保问题验证才可以继续', {btn:['去设置', '取消']}, function(){
+                layer.closeAll();
+                var iframes = layer.open({
+                    type: 2,
+                    title: '安全验证中心',
+                    fixed: true,
+                    shadeClose: false,
+                    shade: layer_shade,
+                    offset: 'auto',
+                    area: ['100%', '100%'],
+                    content: "{:url('Security/second_ask_init', ['gourl'=>weapp_url('Systemdoctor/Systemdoctor/index')])}",
+                    success: function(layero, index){
+                    }
+                });
+                layer.full(iframes);
+            });
+            return false;
+        }
+        if (1 == type) {
+            var href = $(obj).data('href');
+            window.location.href = href;
+        } else if (3 == type) {
+            var value = $(obj).attr('data-value');
+            trojan_horse_submit(value);
+        } else if (4 == type) {
+            autoload_security();
+        }
+    }
+
+    // 上传图片检测木马
+    function trojan_horse_submit(value) {
+        layer_loading('正在处理');
+        $.ajax({
+            url: "{:weapp_url('Systemdoctor/Systemdoctor/trojan_horse')}",
+            data: {value:value,_ajax:1},
+            type: 'post',
+            dataType: 'json',
+            success: function (res) {
+                layer.closeAll();
+                if (1 == res.code) {
+                    layer.msg(res.msg, {time: 1000}, function(){
+                        window.location.reload();
+                    });
+                } else {
+                    var msg = res.msg;
+                    if (1 == is_security_check && msg.indexOf('密保') !== -1) {
+                        autoload_security();
+                    } else {
+                        showErrorAlert(msg);
+                    }
+                }
+            },
+            error:function (e) {
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+
+    // 判断输入框是否为空
+    function restoreUpload()
+    {
+        var sqlfile = $('input[name=sqlfile]').val();
+        var ext = sqlfile.substr(sqlfile.lastIndexOf('.')).toLowerCase();
+        if ($.trim(sqlfile) == '' || ext != '.sql') {
+            showErrorMsg('请上传sql文件！');
+            return false;
+        }
+
+        layer.confirm('此操作不可恢复，确认执行？', {
+            title: false,//'<font color="red">重要提示</font>',
+            btn: ['确定', '取消'] //按钮
+        }, function () {
+            layer_loading('正在处理');
+            $('#change_System').submit();
+            return false;
+        }, function (index) {
+            $('#sqlfile').val('');
+            layer.closeAll();
+            return false;
+        });
+    }
+
+    function open_iframe(url,title='检测结果',w='60%',h="70%") {
+        var url = url;
+        //iframe窗
+        layer.open({
+            type: 2,
+            title: title,
+            fixed: true, //不固定
+            shadeClose: false,
+            shade: 0.3,
+            maxmin: true, //开启最大化最小化按钮
+            area: [w, w],
+            content: url
+        });
+    }
+
+    function open_full_iframe(url,title) {
+        //iframe窗
+        var iframes = layer.open({
+            type: 2,
+            title: title,
+            fixed: true, //不固定
+            shadeClose: true,
+            shade: 0.3,
+            area: ['100%', '100%'], //宽高
+            content: url,
+        });
+        layer.full(iframes);
+    }
+
+</script>
+{include file="footer.htm" /}

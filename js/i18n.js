@@ -14,7 +14,7 @@
       "nav.about": "About Us",
       "nav.equipment": "Equipment",
       "nav.applications": "Applications",
-      "nav.cases": "Cases",
+      "nav.cases": "Video",
       "nav.news": "News",
       "nav.contact": "Contact",
       "nav.download": "Download",
@@ -43,7 +43,7 @@
       "nav.about": "О нас",
       "nav.equipment": "Оборудование",
       "nav.applications": "Применение",
-      "nav.cases": "Кейсы",
+      "nav.cases": "Видео",
       "nav.news": "Новости",
       "nav.contact": "Контакты",
       "nav.download": "Скачать",
@@ -72,7 +72,7 @@
       "nav.about": "Sobre Nosotros",
       "nav.equipment": "Equipos",
       "nav.applications": "Aplicaciones",
-      "nav.cases": "Casos",
+      "nav.cases": "Videos",
       "nav.news": "Noticias",
       "nav.contact": "Contacto",
       "nav.download": "Descargas",
@@ -192,7 +192,7 @@
       const dot = pathname.lastIndexOf(".");
       if (dot > pathname.lastIndexOf("/")) {
         const ext = pathname.slice(dot).toLowerCase();
-        if (ext !== ".html") return;
+        if (ext !== ".html" && ext !== ".htm") return;
       }
       if (lang === DEFAULT_LANG) {
         url.searchParams.delete("lang");

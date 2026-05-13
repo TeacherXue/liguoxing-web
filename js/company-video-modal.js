@@ -19,9 +19,45 @@
   var iframe = modal.querySelector("iframe");
   var closeButton = modal.querySelector(".video-modal-close");
 
+  function extractYouTubeId(src) {
+    if (!src) return "";
+    var value = String(src).trim();
+    var patterns = [
+      /youtu\.be\/([A-Za-z0-9_-]{11})/i,
+      /youtube\.com\/watch\?[^#]*v=([A-Za-z0-9_-]{11})/i,
+      /youtube\.com\/embed\/([A-Za-z0-9_-]{11})/i,
+      /youtube\.com\/shorts\/([A-Za-z0-9_-]{11})/i,
+    ];
+
+    for (var i = 0; i < patterns.length; i += 1) {
+      var match = value.match(patterns[i]);
+      if (match && match[1]) return match[1];
+    }
+
+    return /^[A-Za-z0-9_-]{11}$/.test(value) ? value : "";
+  }
+
+  function toEmbedUrl(src) {
+    var value = String(src || "").trim();
+    if (!value) return "";
+
+    if (/youtube\.com\/embed\//i.test(value)) {
+      return value;
+    }
+
+    var videoId = extractYouTubeId(value);
+    if (videoId) {
+      return "https://www.youtube.com/embed/" + videoId;
+    }
+
+    return value;
+  }
+
   function withAutoplay(src) {
-    var separator = src.indexOf("?") === -1 ? "?" : "&";
-    return src + separator + "autoplay=1&rel=0";
+    var embedSrc = toEmbedUrl(src);
+    if (!embedSrc) return "";
+    var separator = embedSrc.indexOf("?") === -1 ? "?" : "&";
+    return embedSrc + separator + "autoplay=1&rel=0";
   }
 
   function openModal(trigger) {

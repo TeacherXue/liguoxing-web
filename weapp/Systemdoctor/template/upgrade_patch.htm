@@ -1,0 +1,73 @@
+{include file="header.htm" /}
+<style type="text/css">
+    #error_notic_show p{
+        margin: 5px 0px;
+        font-size: 15px;
+    }
+</style>
+<body style="background-color: #FFF; overflow: auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <a class="back_xin" href="{:weapp_url('Systemdoctor/Systemdoctor/index')}" title="返回列表"><i class="iconfont e-fanhui"></i></a>
+            <div class="subject">
+                <h3>无法升级补丁</h3>
+                <h5></h5>
+            </div>
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <div id="explanation" class="explanation" style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <li>由于近期旧升级服务器不稳定，对系统升级及插件更新造成影响，点击下方按钮将自动修补更换新接口。</li>
+            {if condition="$cms_version < 'v1.4.6'"}
+            <li style="color: red;">系统版本低于v1.4.6版本的用户，建议尽快升级系统，如果不想升级系统，请不要点击立即修补。</li>
+            {/if}
+        </ul>
+    </div>
+    <form class="form-horizontal" id="form1" method="post">
+        <div class="ncap-form-default">
+            <dl class="row" style="padding: 0px;">
+                <dt class="tit" style="width: 0px;"></dt>
+                <dd class="opt" id="error_notic_show"></dd>
+            </dl>
+            <div id="cover_patch" class="bot" style="padding-left: 35px; padding-top: 10px;">
+                <a class="ncap-btn-big ncap-btn-green" type="button" id="submitBtn" onclick="cover_patch();">立即修补</a>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    function cover_patch() {
+        layer_loading('正在处理');
+        $.ajax({
+            url: "{:weapp_url('Systemdoctor/Systemdoctor/upgrade_patch')}",
+            data: {_ajax:1},
+            type: 'post',
+            dataType: 'json',
+            success: function (res) {
+                layer.closeAll();
+                if (1 == res.code) {
+                    $("#error_notic_show").html('修补完成，刷新后台尝试升级。');
+                    layer.msg(res.msg, {shade: 0.3, time: 1000});
+                } else {
+                    $("#error_notic_show").html(res.msg);
+                }
+            },
+            error: function(e) {
+                layer.closeAll();
+                layer.alert(e.responseText, {icon: 2, title:false});
+            }
+        });
+    }
+</script>
+{include file="footer.htm" /}

@@ -1,0 +1,164 @@
+{include file="header.htm" /}
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit; min-width:400px;">
+<div class="page" style="min-width: 400px;">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <a class="back_xin" href="{:weapp_url('Systemdoctor/Systemdoctor/index')}" title="返回列表"><i class="iconfont e-fanhui"></i></a>
+            <div class="subject">
+                <h3>数据库优化清理</h3>
+                <h5>一键清理冗余数据，优化表结构</h5>
+            </div>
+        </div>
+    </div>
+    <div id="explanation" class="explanation" style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <li>1、优化前建议先备份数据库，以防万一；</li>
+            <li>2、清理操作不可恢复，请谨慎操作；</li>
+            <li>3、表优化可修复碎片，提升查询性能。</li>
+        </ul>
+    </div>
+    <div class="ncap-form-default" style="margin-top:15px;">
+        <div id="scan_result"></div>
+        <dl class="row">
+            <dt class="tit"><label>清理项目</label></dt>
+            <dd class="opt">
+                <div class="clean-item-list">
+                    <div class="clean-item">
+                        <label><input type="checkbox" name="clean_type[]" value="recycle" checked> 回收站文档 <span id="count_recycle" class="text-muted">(扫描中...)</span></label>
+                        <p class="item-desc">已删除到回收站的文档，清理后将彻底删除无法恢复</p>
+                    </div>
+                    <div class="clean-item">
+                        <label><input type="checkbox" name="clean_type[]" value="orphan_content" checked> 孤立副表数据 <span id="count_orphan_content" class="text-muted">(扫描中...)</span></label>
+                        <p class="item-desc">主表文档已删除，但副表（如文章详情、产品参数）中残留的关联数据</p>
+                    </div>
+                    <div class="clean-item">
+                        <label><input type="checkbox" name="clean_type[]" value="invalid_upload" checked> 无效上传记录 <span id="count_invalid_upload" class="text-muted">(扫描中...)</span></label>
+                        <p class="item-desc">上传记录表中文件已不存在的记录（仅清理数据库记录，不删除实际文件）</p>
+                    </div>
+                    <div class="clean-item">
+                        <label><input type="checkbox" name="clean_type[]" value="expired_session"> 过期会话数据 <span id="count_expired_session" class="text-muted">(扫描中...)</span></label>
+                        <p class="item-desc">已过期的用户登录会话记录，清理后不影响当前在线用户</p>
+                    </div>
+                    <div class="clean-item">
+                        <label><input type="checkbox" name="clean_type[]" value="admin_log"> 30天前操作日志 <span id="count_admin_log" class="text-muted">(扫描中...)</span></label>
+                        <p class="item-desc">后台管理员30天前的操作记录，保留近期日志便于问题排查</p>
+                    </div>
+                </div>
+                <style>
+                .clean-item-list .clean-item { margin-bottom: 12px; }
+                .clean-item-list .clean-item label { font-weight: normal; }
+                .clean-item-list .item-desc { margin: 3px 0 0 22px; font-size: 12px; color: #999; line-height: 1.5; }
+                </style>
+            </dd>
+        </dl>
+        <dl class="row">
+            <dt class="tit"><label>表优化</label></dt>
+            <dd class="opt">
+                <div style="line-height:2.2;">
+                    <label><input type="checkbox" name="optimize_table" value="1"> 优化所有数据表（OPTIMIZE TABLE）</label>
+                    <p class="text-muted" style="margin:5px 0 0 0;">整理表碎片，回收未使用空间，提升查询效率</p>
+                </div>
+            </dd>
+        </dl>
+        <div class="bot">
+            <a class="ncap-btn-big ncap-btn-green" href="javascript:void(0);" id="btnExecute">执行清理优化</a>
+            <a class="ncap-btn-big" href="javascript:void(0);" id="btnScan" style="margin-left:10px;">重新扫描</a>
+        </div>
+    </div>
+    <div id="execute_log" style="margin-top:20px;padding:15px;background:#f9f9f9;border-radius:5px;display:none;">
+        <h4 style="margin:0 0 10px 0;">执行日志</h4>
+        <div id="log_content" style="max-height:300px;overflow-y:auto;font-size:13px;line-height:1.8;"></div>
+    </div>
+</div>
+<script type="text/javascript">
+$(function(){
+    scanData();
+
+    $('#btnScan').click(function(){
+        scanData();
+    });
+
+    $('#btnExecute').click(function(){
+        executeClean();
+    });
+});
+
+function scanData(){
+    var items = ['recycle','orphan_content','invalid_upload','expired_session','admin_log'];
+    for(var i=0; i<items.length; i++){
+        $('#count_'+items[i]).text('(扫描中...)').removeClass('text-danger text-success');
+    }
+    $.ajax({
+        url: "{:weapp_url('Systemdoctor/Systemdoctor/db_optimize_scan')}",
+        type: 'post',
+        dataType: 'json',
+        data: {_ajax:1},
+        success: function(res){
+            if(res.code == 1){
+                var data = res.data;
+                for(var key in data){
+                    var count = data[key];
+                    var cls = count > 0 ? 'text-danger' : 'text-success';
+                    $('#count_'+key).text('('+count+'条)').addClass(cls);
+                }
+            } else {
+                layer.msg(res.msg, {icon:2});
+            }
+        },
+        error: function(){
+            layer.msg('扫描失败，请重试', {icon:2});
+        }
+    });
+}
+
+function executeClean(){
+    var cleanTypes = [];
+    $('input[name="clean_type[]"]:checked').each(function(){
+        cleanTypes.push($(this).val());
+    });
+    var optimizeTable = $('input[name="optimize_table"]:checked').val() || 0;
+
+    if(cleanTypes.length == 0 && optimizeTable == 0){
+        layer.msg('请至少选择一项操作', {icon:5});
+        return false;
+    }
+
+    layer.confirm('此操作不可恢复，确认执行？', {
+        title: '重要提示',
+        btn: ['确定执行', '取消']
+    }, function(){
+        layer.closeAll();
+        layer_loading('正在执行，请稍候...');
+        $('#execute_log').show();
+        $('#log_content').html('<p>开始执行...</p>');
+
+        $.ajax({
+            url: "{:weapp_url('Systemdoctor/Systemdoctor/db_optimize_execute')}",
+            type: 'post',
+            dataType: 'json',
+            data: {clean_types: cleanTypes, optimize_table: optimizeTable, _ajax:1},
+            success: function(res){
+                layer.closeAll();
+                if(res.code == 1){
+                    $('#log_content').html(res.data.log);
+                    layer.msg(res.msg, {icon:1});
+                    scanData();
+                } else {
+                    $('#log_content').append('<p style="color:red;">'+res.msg+'</p>');
+                    layer.msg(res.msg, {icon:2});
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                $('#log_content').append('<p style="color:red;">执行出错：'+e.responseText+'</p>');
+                layer.msg('执行失败', {icon:2});
+            }
+        });
+    });
+}
+</script>
+{include file="footer.htm" /}

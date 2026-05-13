@@ -1,0 +1,65 @@
+{include file="header.htm" /}
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;min-width: auto;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page" style="min-width: auto;box-shadow:none; padding-bottom: 0px;">
+    <form class="form-horizontal" id="post_form" method="POST" action="{:weapp_url('Systemdoctor/Systemdoctor/bom_conf')}" onsubmit="check_submit();">
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit">
+                    <label for="is_autoclear">自动修复</label>
+                </dt>
+                <dd class="opt" style="width: auto;">
+                    <label class="curpoin"><input type="radio" name="is_autoclear" value="1" {notempty name="$conf_data.is_autoclear"} checked="checked" {/notempty}>开启</label>&nbsp;&nbsp;
+                    <label class="curpoin"><input type="radio" name="is_autoclear" value="0" {empty name="$conf_data.is_autoclear"} checked="checked" {/empty}>关闭</label>
+                    <span class="err"></span>
+                    <p class="notic">开启后自动清理多余bom头部信息</p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="is_backup">清理前备份</label>
+                </dt>
+                <dd class="opt" style="width: auto;">
+                    <label class="curpoin"><input type="radio" name="is_backup" value="1" {notempty name="$conf_data.is_backup"} checked="checked" {/notempty}>开启</label>&nbsp;&nbsp;
+                    <label class="curpoin"><input type="radio" name="is_backup" value="0" {empty name="$conf_data.is_backup"} checked="checked" {/empty}>关闭</label>
+                    <p class="notic">已清理文件将自动备份到__ROOT_DIR__/template/bom_backup目录下</p>
+                </dd>
+            </dl>
+            <div class="bot" style="padding-bottom:0px;">
+                <a href="JavaScript:void(0);" onclick="check_submit();" class="ncap-btn-big ncap-btn-green" id="submitBtn">确认提交</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    var parentObj = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+
+    function check_submit()
+    {
+        layer_loading('正在处理');
+        $.ajax({
+            url: "{:weapp_url('Systemdoctor/Systemdoctor/bom_conf')}",
+            type: 'POST',
+            dataType: 'JSON',
+            data: $('#post_form').serialize(),
+            success: function(res){
+                layer.closeAll();
+                if (res.code == 1) {
+                    var _parent = parent;
+                    _parent.layer.close(parentObj);
+                    _parent.layer.msg(res.msg, {shade: layer_shade, time: 1000}, function(){
+                        _parent.window.location.reload();
+                    });
+                } else {
+                    showErrorMsg(res.msg);
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+</script>
+{include file="footer.htm" /}

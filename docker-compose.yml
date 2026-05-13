@@ -1,0 +1,52 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: .docker/php/Dockerfile
+    container_name: liguoxing-web
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: "3306"
+      DB_NAME: eyoucms123
+      DB_USER: eyoucms
+      DB_PASSWORD: eyoucms123
+      TZ: Asia/Shanghai
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    container_name: liguoxing-mysql
+    command:
+      - --character-set-server=utf8
+      - --collation-server=utf8_general_ci
+      - --sql-mode=NO_ENGINE_SUBSTITUTION
+      - --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: eyoucms123
+      MYSQL_USER: eyoucms
+      MYSQL_PASSWORD: eyoucms123
+      MYSQL_ROOT_PASSWORD: root123456
+      TZ: Asia/Shanghai
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./.docker/mysql/01-import.sh:/docker-entrypoint-initdb.d/01-import.sh:ro
+      - ./data/sqldata_TDJpCpx4FjPkH2SGKoEL/20260512-145226-1-v1.7.6.sql:/opt/import/eyoucms.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-proot123456"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    restart: unless-stopped
+
+volumes:
+  mysql_data:

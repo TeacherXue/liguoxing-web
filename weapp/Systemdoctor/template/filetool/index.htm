@@ -1,0 +1,370 @@
+{include file="header.htm" /}
+
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <a class="back_xin" href="{:weapp_url('Systemdoctor/Systemdoctor/index')}" title="返回列表"><i class="iconfont e-fanhui"></i></a>
+            <div class="subject">
+                <h3>文件管理器</h3>
+                <h5></h5>
+            </div>
+        </div>
+    </div>
+    <div class="flexigrid">
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th axis="col3" class="">
+                            <div class="" style="padding-left:15px ">文件名</div>
+                        </th>
+                        <th axis="col3" class="w200">
+                            <div class="tc">文件大小</div>
+                        </th>
+                        <th axis="col6" class="w150">
+                            <div class="tc">更新时间</div>
+                        </th>
+                        <th axis="col1" class="w150">
+                            <div class="tc">操作</div>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <table style="width: 100%">
+                    <tbody>
+                    {empty name="list"}
+                        <tr>
+                            <td class="no-data" align="center" axis="col0" colspan="50">
+                                <div class="no_row">
+                                    <div class="no_pic"><img src="__SKIN__/images/null-data.png"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    {else/}
+                        {foreach name="list" item="vo" key="k" }
+                        <tr>
+                            <td style="width: 100%">
+                                <div style="text-align: left; padding-left: 15px;">
+                                  {if condition="in_array($vo['filetype'], array('dir','dir2'))"}
+                                  <a href="{:weapp_url('Systemdoctor/Filetool/index', array('activepath'=>replace_path($vo.filepath)))}"><img src="__SKIN__/images/{$vo.icon}" border="0" width="16" height="16" align="absmiddle" class="flt_u">&nbsp;{$vo.filename}</a>
+                                  {else /}
+                                    {notempty name="$vo.icon"}
+                                    <img class="flt_u" src="__SKIN__/images/{$vo.icon}" border="0" width="16" height="16" align="absmiddle" {if condition="!empty($vo.filepath) AND 'image' == $vo.filemine"}onmouseover="layer_tips=layer.tips('<img src=__ROOT_DIR__{$vo.filepath}?v={php}echo time();{/php} class=\'layer_tips_img\'>',this,{tips: [1, '#fff']});"{/if} onmouseout="layer.close(layer_tips);">
+                                    {/notempty}
+                                    &nbsp;
+                                    {eq name="$vo['filemine']" value='image'}
+                                        <a href="__ROOT_DIR__{$vo['filepath']}?v={php}echo time();{/php}" target="_blank">{$vo.filename}</a>
+                                    {else /}
+                                        <a href="{:weapp_url('Systemdoctor/Filetool/edit',array('filename'=>$vo['filename'], 'activepath'=>replace_path(dirname($vo['filepath']))))}">{$vo.filename}</a>
+                                    {/eq}
+                                  {/if}
+                                  {$vo.intro}
+                                </div>
+                            </td>
+                            <td class="">
+                                <div class="w200 tc">
+                                  {$vo.filesize|default=''}
+                                </div>
+                            </td>
+                            <td class="">
+                                <div class="w150 tc">
+                                  {notempty name="$vo.filetime"}
+                                  {$vo.filetime|date='Y-m-d H:i:s',###}
+                                  {/notempty}
+                                </div>
+                            </td>
+                            <td class="operation">
+                                <div class="w150 tl">
+                                    {if condition="!in_array($vo['filetype'], ['dir','dir2'])"}
+                                        <a href="{:weapp_url('Systemdoctor/Filetool/edit',array('filename'=>$vo['filename'], 'activepath'=>replace_path(dirname($vo['filepath']))))}" class="btn blue">编辑</a>
+                                        <i></i>
+                                    {elseif condition="!in_array($vo['filetype'], ['dir2'])" /}
+                                        <a class="btn grey"  href="javascript:void(0);" title="文件夹不支持编辑">编辑</a>
+                                        <i></i>
+                                    {/if}
+                                    {if condition="!in_array($vo['filetype'], ['dir2'])"}
+                                    <a href="javascript:void(0);" data-filename="{$vo['filename']}" data-url="{:weapp_url('Systemdoctor/Filetool/resetname',array('filename'=>$vo['filename'], 'activepath'=>replace_path(dirname($vo['filepath']))))}" onclick="resetname(this);" class="btn blue">重命名</a>
+                                    <i></i>
+                                    <a href="javascript:void(0);" data-url="{:weapp_url('Systemdoctor/Filetool/del',array('filename'=>$vo['filename'], 'activepath'=>replace_path(dirname($vo['filepath']))))}" onclick="delfile(this);" class="btn blue">删除</a>
+                                    {/if}
+                                    {if condition="!in_array($vo['filetype'], ['dir','dir2'])"}
+                                        <!-- <i></i>
+                                        <a href="{:weapp_url('Systemdoctor/Filetool/movefile',array('filename'=>$vo['filename'], 'activepath'=>replace_path(dirname($vo['filepath']))))}" class="btn blue">移动</a> -->
+                                    {elseif condition="!in_array($vo['filetype'], ['dir2'])" /}
+                                        <!-- <i></i>
+                                        <a class="btn grey"  href="javascript:void(0);" title="文件夹不支持移动">移动</a> -->
+                                    {/if}
+                                </div>
+                            </td>
+                        </tr>
+                        {/foreach}
+                    {/empty}
+                    </tbody>
+                </table>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        <div class="tDiv">
+            <div class="tDiv2">
+                <!-- <div class="fbutton">
+                    <a href="{:weapp_url('Systemdoctor/Filetool/newfile', array('activepath'=>replace_path($activepath)))}" class="layui-btn layui-btn-primary">
+                        <span class="red">新建文件</span>
+                    </a>
+                </div>
+                <div class="fbutton">
+                    <a href="javascript:void(0);" data-url="{:weapp_url('Systemdoctor/Filetool/newdir', array('activepath'=>replace_path($activepath)))}" onclick="newdir(this);" class="layui-btn layui-btn-primary">
+                        <span>新建目录</span>
+                    </a>
+                </div> -->
+                <div class="fbutton">
+                    <a href="javascript:void(0);" class="layui-btn layui-btn-primary" id="a_uploadfile">
+                        <span>文件上传</span>
+                    </a>
+                    <form action="{:weapp_url('Systemdoctor/Filetool/uploadfile', array('activepath'=>replace_path($activepath)))}" name="form_uploadfile" id="form_uploadfile" method="post" enctype="multipart/form-data" style="display: none;">
+                        <input type="file" name="uploadfile" id="uploadfile" title="请选择…">
+                    </form>
+                </div>
+                <!-- <div class="fbutton">
+                    <a href="{:weapp_url('Systemdoctor/Filetool/space_check', array('activepath'=>replace_path($activepath)))}" class="layui-btn layui-btn-primary">
+                        <span>空间检查</span>
+                    </a>
+                </div>
+                <div class="fbutton">
+                    <a href="{:weapp_url('Systemdoctor/Filetool/index')}" class="layui-btn layui-btn-primary">
+                        <span>返回根目录</span>
+                    </a>
+                </div> -->
+                {/eq}
+				<div class="fbuttonr" style=" margin-right: 15px; ">
+					<div class="total">
+					   <h5>共有{$list|count}条数据</h5>
+					</div>
+				</div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <!--分页位置-->
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+
+        // 点击刷新数据
+        $('.fa-refresh').click(function(){
+            location.href = location.href;
+        });
+    });
+
+    $('#a_uploadfile').click(function(){
+        $('#uploadfile').click();
+    });
+
+    $('#uploadfile').change(function(){
+        var uploadfile = $("#uploadfile")[0].files[0];  //获取文件路径名
+        var uploadfileName = uploadfile.name;
+        var ext = uploadfileName.substr(uploadfileName.lastIndexOf('.')).toLowerCase();
+ 
+        var formData = new FormData();
+        formData.append('_ajax', 1);
+        formData.append('file', uploadfile);
+      
+        layer_loading('正在处理');
+        $.ajax({
+            url: $('#form_uploadfile').attr('action'),
+            type: "POST",
+            data: formData,
+            dataType: "json", //声明成功使用json数据类型回调
+            //如果传递的是FormData数据类型，那么下来的三个参数是必须的，否则会报错
+            cache: false,  //默认是true，但是一般不做缓存
+            processData: false, //用于对data参数进行序列化处理，这里必须false；如果是true，就会将FormData转换为String类型
+            contentType: false,  //一些文件上传http协议的关系，自行百度，如果上传的有文件，那么只能设置为false
+            success: function(res){  //请求成功后的回调函数
+                layer.closeAll();
+                if (1 == res.code) {
+                    layer.msg(res.msg, {shade: layer_shade, icon:1, time: 1000}, function(){
+                        window.location.reload();
+                    });
+                } else {
+                    $('#uploadfile').val('');
+                    showErrorAlert(res.msg);
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    });
+
+    function delfile(obj)
+    {
+        layer.confirm('此操作不可恢复，确认删除？', {
+                shade: layer_shade,
+                area: ['480px', '190px'],
+                move: false,
+                title: '提示',
+                btnAlign:'r',
+                closeBtn: 3,
+                btn: ['确定', '取消'] ,//按钮
+                success: function() {
+                    $(".layui-layer-content").css('text-align', 'left');
+                }
+            }, function(){
+                layer_loading('正在处理');
+                var url = $(obj).data('url');
+                $.ajax({
+                    type : 'post',
+                    url : url,
+                    data : {_ajax:1},
+                    dataType : 'json',
+                    success : function(res){
+                        layer.closeAll();
+                        if(res.code == 1){
+                            layer.msg(res.msg, {shade: layer_shade, icon:1, time: 1000}, function(){
+                                window.location.reload();
+                            });
+                        }else{
+                            showErrorAlert(res.msg);
+                        }
+                    },
+                    error: function(e){
+                        layer.closeAll();
+                        showErrorAlert(e.responseText);
+                    }
+                });
+            }, function(index){
+                layer.close(index);
+                return false;// 取消
+            }
+        ); 
+    }
+
+    function newdir(obj)
+    {
+        var url = $(obj).data('url');
+        layer.prompt({
+            title: '新建目录',
+            id: 'layerid_1645598368',
+            btn: ['确定','取消'],
+            shade: layer_shade,
+            closeBtn: 0,
+            success: function(layero, index) {
+                var before_str = "<div style='margin: 8px 0px 10px 0px;'>不能包含下列任何字符：\\ / : * ? \" < > |</div>";
+                $("#layerid_1645598368").append(before_str);
+                $("#layerid_1645598368").find('input').attr('placeholder', '请输入目录名称');
+                $("#layerid_1645598368").find('input').attr('onkeyup', 'this.value=this.value.replace(/[\\\\/\:\*\?\"\<\>\|]/g,\'\');');
+                $("#layerid_1645598368").find('input').attr('onpaste', 'this.value=this.value.replace(/[\\\\/\:\*\?\"\<\>\|]/g,\'\');');
+                $("#layerid_1645598368").find('input').bind('keydown', function(event) {
+                    if (event.keyCode == 13) {
+                        newdir_submit(obj, $(this).val());
+                    }
+                });
+            },
+            btn2: function(index, layero){
+                layer.close(index);
+            }
+        }, function(value, index) {
+            newdir_submit(obj, value);
+        });
+        return false;
+    }
+
+    function newdir_submit(obj, dirname)
+    {
+        var url = $(obj).data('url');
+        $.ajax({
+            type : 'post',
+            url : url,
+            data : {dirname:dirname, _ajax:1},
+            dataType : 'json',
+            success : function(res){
+                layer.closeAll();
+                if(res.code == 1){
+                    layer.msg(res.msg, {shade: layer_shade, icon:1, time: 1000}, function(){
+                        window.location.reload();
+                        // window.location.href = res.url;
+                    });
+                }else{
+                    showErrorAlert(res.msg);
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+
+    function resetname(obj)
+    {
+        var url = $(obj).data('url');
+        var old_filename = $(obj).data('filename');
+        layer.prompt({
+            title: '重命名',
+            id: 'layerid_1645598368',
+            btn: ['确定','取消'],
+            shade: layer_shade,
+            closeBtn: 0,
+            success: function(layero, index) {
+                var before_str = "<div style='margin: 0px 0px 10px 0px;'>旧名称："+old_filename+"</div>";
+                $("#layerid_1645598368").prepend(before_str);
+                var append_str = "<div style='margin: 8px 0px 0px 0px;'>不能包含下列任何字符：\\ / : * ? \" < > |</div>";
+                $("#layerid_1645598368").append(append_str);
+                $("#layerid_1645598368").find('input').attr('placeholder', '请输入新的名称');
+                $("#layerid_1645598368").find('input').attr('onkeyup', 'this.value=this.value.replace(/[\\\\/\:\*\?\"\<\>\|]/g,\'\');');
+                $("#layerid_1645598368").find('input').attr('onpaste', 'this.value=this.value.replace(/[\\\\/\:\*\?\"\<\>\|]/g,\'\');');
+                $("#layerid_1645598368").find('input').bind('keydown', function(event) {
+                    if (event.keyCode == 13) {
+                        resetname_submit(obj, $(this).val(), old_filename);
+                    }
+                });
+            },
+            btn2: function(index, layero){
+                layer.close(index);
+            }
+        }, function(value, index) {
+            resetname_submit(obj, value, old_filename);
+        });
+        return false;
+    }
+
+    function resetname_submit(obj, dirname, old_filename)
+    {
+        var url = $(obj).data('url');
+        $.ajax({
+            type : 'post',
+            url : url,
+            data : {dirname:dirname, old_filename:old_filename, _ajax:1},
+            dataType : 'json',
+            success : function(res){
+                layer.closeAll();
+                if(res.code == 1){
+                    layer.msg(res.msg, {shade: layer_shade, icon:1, time: 1000}, function(){
+                        window.location.reload();
+                    });
+                }else{
+                    showErrorAlert(res.msg);
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+</script>
+
+{include file="footer.htm" /}

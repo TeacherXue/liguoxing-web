@@ -1,4 +1,10 @@
 (function () {
+  const currentScript = document.currentScript;
+  const assetBase = currentScript ? new URL("../", currentScript.src) : new URL("/", window.location.origin);
+  function imageUrl(file) {
+    return 'url("' + new URL("images/" + file, assetBase).pathname + '")';
+  }
+
   function initHomeBanner() {
   const hero = document.querySelector("[data-hero-carousel]");
   if (!hero) return;
@@ -17,8 +23,8 @@
 
   const slides = [
     {
-      bg: 'url("/images/footer.jpg")',
-      machine: 'url("/images/hero-slide-line.png")',
+      bg: imageUrl("footer.jpg"),
+      machine: imageUrl("hero-slide-line.png"),
       kicker: "Manufacturer <i></i> Factory <i></i> Direct",
       title:
         'Direct Block Bottomer Machine<br><span>Manufacturer</span>',
@@ -28,8 +34,8 @@
       secondary: "Request a Quote",
     },
     {
-      bg: 'url("/images/home.jpg")',
-      machine: 'url("/images/hero-slide-unwind.png")',
+      bg: imageUrl("home.jpg"),
+      machine: imageUrl("hero-slide-unwind.png"),
       kicker: "Automation <i></i> Welding <i></i> Servo",
       title:
         'Advanced Hot Air<br><span>Welding Technology</span>',
@@ -39,8 +45,8 @@
       secondary: "Request a Quote",
     },
     {
-      bg: 'url("/images/p1.jpg")',
-      machine: 'url("/images/hero-slide-process.png")',
+      bg: imageUrl("p1.jpg"),
+      machine: imageUrl("hero-slide-process.png"),
       kicker: "Global <i></i> Proven <i></i> Export",
       title:
         'Trusted By Global<br><span>Packaging Plants</span>',

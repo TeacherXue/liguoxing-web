@@ -1,0 +1,189 @@
+{include file="header.htm" /}
+<body style="background-color: #FFF; overflow: auto;">
+  <div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+  <div id="append_parent"></div>
+  <div id="ajaxwaitid"></div>
+  <div class="page">
+    {include file="bar.htm" /}
+    <form class="form-horizontal" id="post_form" action="" method="post">
+      <div class="ncap-form-default">
+        <dl class="row">
+          <dt class="tit">
+            <label for="copyright_is_on">是否启用</label>
+          </dt>
+          <dd class="opt">
+            <div class="onoff">
+              <label for="copyright_is_on1" class="cb-enable {if condition='!empty($row.is_on)'}selected{/if}">启用</label>
+              <label for="copyright_is_on0" class="cb-disable {if condition='empty($row.is_on)'}selected{/if}">关闭</label>
+              <input id="copyright_is_on1" name="captcha[pojie-plus][is_on]" value="1" type="radio" {if condition='!empty($row.is_on)' }checked="checked" {/if}>
+              <input id="copyright_is_on0" name="captcha[pojie-plus][is_on]" value="0" type="radio" {if condition='empty($row.is_on)' }checked="checked" {/if}>
+            </div>
+            <span class="err"></span>
+            <br />
+            <p style="font-size: 12px;">后台刷新看效果，前台可能需要清除缓存</p>
+          </dd>
+        </dl>
+        <dl class="row">
+          <dt class="tit">
+            <label>附加补丁</label>
+          </dt>
+          <dd class="opt">
+            <input id="downkey" style="width: 260px;" type="text" name="captcha[pojie-plus][config][luckey]" value="">
+            <a href='javascript:void(0);' onclick='goodluck(this);' id="downloadPatchBtn">下载补丁</a>
+            <br />
+            <p style="font-size: 12px;">老版本用户跳过，1.5.2及以上版本采用附加补丁破解，附加补丁见 <a rel="nofollow" href="https://hbh.cool/user" target="_blank">订单详情</a></p>
+            <p style="color:#f60;">
+              <b>其他补丁：</b>
+              <a rel="nofollow" href="https://hbh.cool/find/9164.html" target="_blank">非授权域名升级补丁</a>
+              <a rel="nofollow" href="https://hbh.cool/find/9166.html" target="_blank" style="margin: 0 20px;">zancms破解补丁</a>
+              <a rel="nofollow" href="https://hbh.cool/find/9165.html" target="_blank">插件升级补丁</a>
+            </p>
+          </dd>
+        </dl>
+        <dl class="row">
+          <dt class="tit">
+            <label for="hidelist_is_on">隐藏该插件</label>
+          </dt>
+          <dd class="opt">
+            <div class="onoff">
+              <label for="hidelist_is_on1" class="cb-enable {if condition='!empty($row.is_hide)'}selected{/if}">隐藏</label>
+              <label for="hidelist_is_on0" class="cb-disable {if condition='empty($row.is_hide)'}selected{/if}">显示</label>
+              <input id="hidelist_is_on1" name="captcha[pojie-plus][is_hide]" value="1" type="radio" {if condition='!empty($row.is_hide)' }checked="checked" {/if}>
+              <input id="hidelist_is_on0" name="captcha[pojie-plus][is_hide]" value="0" type="radio" {if condition='empty($row.is_hide)' }checked="checked" {/if}>
+            </div>
+            <span class="err"></span>
+            <br />
+            <p style="font-size: 12px;">隐藏后插件仍然生效
+              <br />隐藏后也可以访问：后台地址?m=admin&c=Weapp&a=execute&sm=pojie&sc=pojie
+              <br /><br />重置办法：
+              <br />1.weapp目录中删除插件
+              <br />2.退出并重新登录后台一次
+              <br />3.重新拷贝插件放入weapp目录，安装启用
+            </p>
+            <br />
+            <span>提交后清理缓存并重新登录</span></p>
+          </dd>
+        </dl>
+        <div class="bot">
+          <input type="hidden" name="inc_type" id="inc_type" value="{$inc_type|default='default'}">
+          <a href="JavaScript:void(0);" onclick="checkForm();" class="ncap-btn-big ncap-btn-green" id="submitBtn">确认提交</a>
+        </div>
+      </div>
+    </form>
+  </div>
+  <script type="text/javascript">
+    // 表单提交处理
+    function checkForm() {
+      layer_loading('正在处理');
+      $('#post_form').submit();
+    }
+
+    // 下载补丁处理函数
+    function goodluck(obj) {
+      var unified_number = $('#downkey').val().trim();
+      if (!unified_number) {
+        layer.msg('密钥为空', {time: 1500});
+        return;
+      }
+      
+      // 禁用按钮，防止重复点击
+      var $btn = $(obj);
+      $btn.prop('disabled', true);
+      
+      // 根据密钥类型显示不同提示
+      var tips = getPatchTypeMessage(unified_number);
+      
+      layer.confirm(tips, {
+        title: '消息',
+        btn: ['下载', '取消']
+      }, function(){
+        layer.closeAll();
+        downloadPatch(unified_number, $btn);
+      }, function() {
+        // 取消时重新启用按钮
+        $btn.prop('disabled', false);
+      });
+    }
+    
+    // 获取补丁类型提示信息
+    function getPatchTypeMessage(unified_number) {
+      var tips = '';
+      if (unified_number.includes('Aa-')) {
+        tips = '通用升级补丁' + unified_number + '下载<br/>将消耗 <b style="color: red;">1</b> 次下载量';
+      } else if (unified_number.includes('Bb-')) {
+        tips = 'zancms破解补丁' + unified_number + '下载<br/>将消耗 <b style="color: red;">1</b> 次下载量';
+      } else if (unified_number.includes('Cj-')) {
+        tips = '升级插件补丁' + unified_number + '下载<br/>将消耗 <b style="color: red;">1</b> 次下载量';
+      } else {
+        tips = '即将进行【eyoucms破解补丁】下载';
+      }
+      return tips;
+    }
+    
+    // 执行补丁下载
+    function downloadPatch(unified_number, $btn) {
+      // 显示加载提示
+      var loadIndex = layer.msg('正在下载补丁...', {
+        icon: 16,
+        time: 0,
+        shade: 0.3
+      });
+      
+      setTimeout(function(){
+        $.ajax({
+          url: "{:weapp_url('pojie/pojie/goodluck', ['_ajax'=>1])}",
+          data: {unified_number: unified_number},
+          type: 'post',
+          dataType: 'json',
+          timeout: 30000, // 30秒超时
+          success: function(res) {
+            layer.close(loadIndex);
+            if (typeof res === 'string') {
+              layer.msg(res, {time: 5000});
+            } else if (res.code === 1) {
+              layer.msg(res.msg || '下载成功', {time: 3000, icon: 1});
+            } else {
+              layer.msg(res.msg || '下载失败', {time: 3000, icon: 2});
+            }
+            // 重新启用按钮
+            $btn.prop('disabled', false);
+          },
+          error: function(xhr, status, error) {
+            layer.close(loadIndex);
+            layer.msg('下载请求失败: ' + (status === 'timeout' ? '请求超时' : error), {time: 3000, icon: 2});
+            // 重新启用按钮
+            $btn.prop('disabled', false);
+          }
+        });
+      }, 200);
+    }
+    
+    // 页面加载完成后初始化事件
+    $(function() {
+      // 为下载按钮添加悬停效果
+      $('#downloadPatchBtn').hover(
+        function() { $(this).css('opacity', '0.8'); },
+        function() { $(this).css('opacity', '1'); }
+      );
+      
+      // 为提交按钮添加悬停效果
+      $('#submitBtn').hover(
+        function() { $(this).css('opacity', '0.9'); },
+        function() { $(this).css('opacity', '1'); }
+      );
+    });
+  </script>
+  <style>
+    .onoff .selected {
+        background-color: #5FB878 !important;
+        border-color: #5FB878 !important;
+    }
+    #downloadPatchBtn, #submitBtn {
+        transition: opacity 0.3s ease;
+    }
+    #downloadPatchBtn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+  </style>
+  {include file="footer.htm" /}

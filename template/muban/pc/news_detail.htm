@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="valve bag machinery factory, woven sack machinery supplier, direct manufacturer of valve bag machines, block bottom valve bag machine manufacturer, woven bag production line, PP woven bag machine factory">
+  <title>Valve Bag Machinery Factory | LIGUOXING</title>
+  <meta name="description" content="Read {$eyou.field.title} from LIGUOXING, a valve bag machinery factory and direct manufacturer of woven sack production equipment.">
+  <link rel="canonical" href="{eyou:global name='web_basehost' /}/news/{$eyou.field.htmlfilename}.htm">
+  <link rel="stylesheet" href="{eyou:global name='web_cmsurl' /}/css/main.css">
+</head>
+<body>
+  {eyou:include file="includes/header.htm" /}
+
+  <section class="page-hero detail-hero">
+    <div class="container">
+      <h1>{$eyou.field.title}</h1>
+      {eyou:notempty name='$eyou.field.subtitle'}
+      <p class="detail-hero-subtitle">{$eyou.field.subtitle}</p>
+      {eyou:else /}
+      <p class="detail-hero-summary">{$eyou.field.seo_description}</p>
+      {/eyou:notempty}
+    </div>
+  </section>
+
+  <main class="content-wrap detail-wrap">
+    <div class="container detail-layout">
+      <article class="detail-article news-detail-article">
+        <div class="detail-meta">
+          <span>{$eyou.field.typename}</span>
+          <time datetime="{$eyou.field.add_time|MyDate='Y-m-d',###}">{$eyou.field.add_time|MyDate='M d, Y',###}</time>
+        </div>
+        {eyou:notempty name='$eyou.field.litpic'}
+        <figure class="detail-image">
+          <img src="{$eyou.field.litpic}" alt="{$eyou.field.title}">
+        </figure>
+        {/eyou:notempty}
+        <div class="news-richtext">
+          {$eyou.field.content}
+        </div>
+      </article>
+      <aside class="detail-aside">
+        <div class="detail-side-card dark-side-card">
+          <h3>News Update</h3>
+          <p>{$eyou.field.add_time|MyDate='M d, Y',###}</p>
+          <p>LIGUOXING technical, delivery, application, and service updates.</p>
+        </div>
+        <div class="detail-side-card related-list">
+          <h3>More News</h3>
+          {eyou:arclist typeid='1' row='4' orderby='add_time' ordermode='desc'}
+          {eyou:neq name='$field.aid' value='$eyou.field.aid'}
+          <a href="{eyou:global name='web_cmsurl' /}/news/{$field.htmlfilename}.htm">{$field.title}</a>
+          {/eyou:neq}
+          {/eyou:arclist}
+        </div>
+        <div class="detail-side-card news-inquiry-card">
+          <h3>Business Inquiry</h3>
+          <p><strong>Email:</strong> <a class="text-link" href="mailto:leo@liguoxing.com">leo@liguoxing.com</a></p>
+          <p><strong>WhatsApp:</strong> <a class="text-link" href="https://wa.me/8618561683175" target="_blank" rel="noopener">+86 185 6168 3175</a></p>
+          <div class="contact-socials" aria-label="Social links">
+            <a href="https://www.instagram.com/leo910508?igsh=NGg0bjN1d3ZudGQ4&amp;utm_source=qr" target="_blank" rel="noopener" aria-label="Instagram"><img src="{eyou:global name='web_cmsurl' /}/images/social-instagram.svg" alt="Instagram"></a>
+            <a href="https://youtube.com/@valvebagequipment?si=iIgk3m1Kx0meyBVe" target="_blank" rel="noopener" aria-label="YouTube"><img src="{eyou:global name='web_cmsurl' /}/images/social-youtube.svg" alt="YouTube"></a>
+            <a href="https://www.facebook.com/share/1CnmhxTrnF/?mibextid=wwXIfr" target="_blank" rel="noopener" aria-label="Facebook"><img src="{eyou:global name='web_cmsurl' /}/images/social-facebook.svg" alt="Facebook"></a>
+            <a href="https://wa.me/8618561683175" target="_blank" rel="noopener" aria-label="WhatsApp"><img src="{eyou:global name='web_cmsurl' /}/images/social-whatsapp.svg" alt="WhatsApp"></a>
+          </div>
+        </div>
+        <a class="btn btn-primary detail-cta-button" href="{eyou:global name='web_cmsurl' /}/news.htm">Back to News <b>-></b></a>
+      </aside>
+    </div>
+  </main>
+
+  {eyou:include file="includes/footer.htm" /}
+  <script src="{eyou:global name='web_cmsurl' /}/js/site-shell.js?v=20260511-contact"></script>
+  <script src="{eyou:global name='web_cmsurl' /}/js/i18n-auto-dict.js"></script>
+  <script src="{eyou:global name='web_cmsurl' /}/js/i18n.js"></script>
+</body>
+</html>

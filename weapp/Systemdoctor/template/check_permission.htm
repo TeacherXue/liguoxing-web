@@ -1,0 +1,103 @@
+{include file="header.htm" /}
+<style>
+    .permission-wrap{
+        min-width:420px;
+        padding:24px 20px 32px;
+        background:#f5f7fb;
+    }
+    .permission-card{
+        max-width:720px;
+        margin:0 auto;
+        background:#fff;
+        border-radius:12px;
+        box-shadow:0 18px 40px rgba(15,32,82,0.08);
+        padding:28px 32px;
+    }
+    .permission-head{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        margin-bottom:18px;
+    }
+    .permission-title{
+        font-size:20px;
+        font-weight:600;
+        color:#202848;
+        margin:0;
+    }
+    .permission-meta{
+        font-size:13px;
+        color:#8692b0;
+    }
+    .permission-note{
+        padding:12px 16px;
+        border-radius:8px;
+        background:#fff7ed;
+        border:1px solid #ffe6c7;
+        color:#e57a00;
+        font-size:13px;
+        line-height:1.6;
+        margin-bottom:20px;
+    }
+    #error_notic_show{
+        display:none;
+        font-size:15px;
+        line-height:1.6;
+        border:1px solid #e8ecf4;
+        border-radius:8px;
+        padding:16px;
+        background:#fdfdff;
+        color:#242f49;
+        overflow:auto;
+        max-height:60vh;
+    }
+    .btn-back{
+        display:inline-flex;
+        align-items:center;
+        font-size:13px;
+        color:#5566ff;
+        text-decoration:none;
+    }
+    .btn-back i{
+        font-size:16px;
+        margin-right:6px;
+    }
+</style>
+
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit; min-width:400px;">
+<div class="page" style="min-width: 400px;">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <a class="back_xin" href="{:weapp_url('Systemdoctor/Systemdoctor/index')}" title="返回列表"><i class="iconfont e-fanhui"></i></a>
+            <div class="subject">
+                <h3>检测目录权限</h3>
+                <h5></h5>
+            </div>
+        </div>
+        <div class="permission-note">
+            扫描过程中无需操作，请勿关闭窗口；如检测到异常，将在下方列出目录及建议权限值。
+        </div>
+        <div id="error_notic_show"></div>
+    </div>
+</div>
+<script type="text/javascript">
+    var parentObj = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+    layer_loading('正在处理');
+    $.ajax({
+        url: "{:weapp_url('Systemdoctor/Systemdoctor/check_permission')}",
+        data: {_ajax:1},
+        type: 'post',
+        dataType: 'json',
+        success: function (res) {
+            layer.closeAll();
+            if ('1' == res.code) {
+                var _parent = parent;
+                _parent.layer.close(parentObj);
+                _parent.layer.msg(res.msg, {shade: 0.3, time: 1000});
+            } else {
+                $("#error_notic_show").show().html(res.msg);
+            }
+        }
+    });
+</script>
+{include file="footer.htm" /}

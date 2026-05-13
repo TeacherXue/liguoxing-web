@@ -1,0 +1,21 @@
+<?php
+//000000086400
+ exit();?>
+a:2:{s:13:"web_xss_words";a:2:{s:4:"name";s:13:"web_xss_words";s:5:"value";s:141:"union
+delete
+outfile
+char
+concat
+truncate
+insert
+revoke
+grant
+replace
+rename
+declare
+exec
+delimiter
+phar
+eval
+onerror
+script";}s:14:"web_xss_filter";a:2:{s:4:"name";s:14:"web_xss_filter";s:5:"value";s:0:"";}}

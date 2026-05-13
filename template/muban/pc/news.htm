@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="woven sack machinery supplier, valve bag machinery factory, direct manufacturer of valve bag machines, woven bag production line, block bottom valve bag machine manufacturer, PP woven bag machine factory">
+  <title>Woven Sack Machinery Supplier | LIGUOXING</title>
+  <meta name="description" content="Read production updates, delivery news, and engineering notes from LIGUOXING, a valve bag machinery factory and direct manufacturer of woven sack equipment.">
+  <link rel="canonical" href="{eyou:global name='web_basehost' /}/news.htm">
+  <link rel="stylesheet" href="{eyou:global name='web_cmsurl' /}/css/main.css">
+</head>
+<body>
+  {eyou:include file="includes/header.htm" /}
+
+  <section class="page-hero detail-hero"><div class="container"><h1>{$eyou.field.typename}</h1><p>{$eyou.field.seo_description}</p></div></section>
+
+  <main class="content-wrap">
+    <div class="container news-grid listing-news-grid">
+      {eyou:list pagesize='24' titlelen='120' orderby='add_time' ordermode='desc'}
+      <a class="news-card news-card-link" href="{eyou:global name='web_cmsurl' /}/news/{$field.htmlfilename}.htm">
+        <img src="{$field.litpic}" alt="{$field.title}">
+        <div class="card-body">
+          <time datetime="{$field.add_time|MyDate='Y-m-d',###}">{$field.add_time|MyDate='M d, Y',###}</time>
+          <h3>{$field.title}</h3>
+          <p>{$field.introduction}</p>
+          <span class="read-more">Read More -></span>
+        </div>
+      </a>
+      {/eyou:list}
+    </div>
+  </main>
+
+  {eyou:include file="includes/footer.htm" /}
+  <script src="{eyou:global name='web_cmsurl' /}/js/site-shell.js?v=20260511-contact"></script>
+  <script src="{eyou:global name='web_cmsurl' /}/js/i18n-auto-dict.js"></script>
+  <script src="{eyou:global name='web_cmsurl' /}/js/i18n.js"></script>
+</body>
+</html>

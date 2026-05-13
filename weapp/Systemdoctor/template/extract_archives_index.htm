@@ -1,0 +1,107 @@
+{include file="header.htm" /}
+<body class="bodystyle" style="cursor: default; -moz-user-select: inherit; min-width:400px;">
+<div class="page" style="min-width: 400px;">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <a class="back_xin" href="{:weapp_url('Systemdoctor/Systemdoctor/index')}" title="返回列表"><i class="iconfont e-fanhui"></i></a>
+            <div class="subject">
+                <h3>文档链接提取</h3>
+                <h5></h5>
+            </div>
+        </div>
+    </div>
+    <form class="form-horizontal" id="post_form" action="{:weapp_url('Systemdoctor/Systemdoctor/extract_archives_index')}" method="get">
+        {$searchform.hidden|default=''}
+        <div class="ncap-form-default">
+            <dl class="row">
+                <dt class="tit"><em>*</em>栏目分类</dt>
+                <dd class="opt">
+                    <select name="typeid" id="typeid">
+                        <option value="0">请选择栏目…</option>
+                        {$arctype_html}
+                    </select>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">文档ID段</dt>
+                <dd class="opt">
+                    <input style="width:100px;" name="startid" type="text" placeholder="起始ID" id="startid" class="alltxt" />
+                    <span style="color: #999;font-weight: bold;font-size:26px;">&nbsp;-&nbsp;</span>
+                    <input style="width:100px;" name="endid" type="text" placeholder="结束ID" id="endid" class="alltxt" />
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="output_type">输出格式</label>
+                </dt>
+                <dd class="opt">
+                    <label><input type="radio" name="output_type" value="0" checked>文档链接</label>&nbsp;&nbsp;
+                    <label><input type="radio" name="output_type" value="1">文档标题=链接</label>&nbsp;&nbsp;
+                    <span class="err"></span>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="content">结果输出</label>
+                </dt>
+                <dd class="opt">
+                    <textarea rows="5" cols="80" id="content" name="content" style="height: 380px; width: 950px;" placeholder=""></textarea>
+                    <p class="notic"></p>
+                </dd>
+            </dl>
+            <dl class="row">
+                <dt class="tit">
+                    <label for="info">&nbsp;</label>
+                </dt>
+                <dd class="opt">
+                    <a href="JavaScript:void(0);" onclick="check_submit()" class="ncap-btn-big ncap-btn-green" id="submitBtn">确认提交</a>
+                </dd>
+            </dl>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+
+        // 点击刷新数据
+        $('.fa-refresh').click(function(){
+            location.href = location.href;
+        });
+    });
+
+    // 判断输入框是否为空
+    function check_submit(){
+        if ($('#typeid').val() == 0) {
+            showErrorMsg('请选择栏目…！');
+            $('#typeid').focus();
+            return false;
+        }
+        layer_loading('正在处理');
+        $.ajax({
+            type : 'post',
+            url : "{:weapp_url('Systemdoctor/Systemdoctor/extract_archives_index', ['_ajax'=>1])}",
+            data : $('#post_form').serialize(),
+            dataType : 'json',
+            success : function(res){
+                layer.closeAll();
+                if(res.code == 1){
+                    $("#content").val(res.data.content);
+                    layer.msg(res.msg, {shade: layer_shade, time: 800});
+                }else{
+                    showErrorMsg(res.msg);
+                }
+            },
+            error: function(e){
+                layer.closeAll();
+                showErrorAlert(e.responseText);
+            }
+        });
+    }
+</script>
+{include file="footer.htm" /}

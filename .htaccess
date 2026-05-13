@@ -1,0 +1,39 @@
+<IfModule mod_rewrite.c>
+    Options +FollowSymlinks -Multiviews
+    RewriteEngine On
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^news\.htm$ index.php?m=home&c=Lists&a=index&tid=news [QSA,PT,L]
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^news/([A-Za-z0-9_-]+)\.htm$ index.php?m=home&c=View&a=index&dirname=news&aid=$1 [QSA,PT,L]
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^download\.htm$ index.php?m=home&c=Lists&a=index&tid=download [QSA,PT,L]
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^download/([A-Za-z0-9_-]+)\.htm$ index.php?m=home&c=View&a=index&dirname=download&aid=$1 [QSA,PT,L]
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^video\.htm$ index.php?m=home&c=Lists&a=index&tid=video [QSA,PT,L]
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^video/([A-Za-z0-9_-]+)\.htm$ index.php?m=home&c=View&a=index&dirname=video&aid=$1 [QSA,PT,L]
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_URI} !^/(index|login)\.php$ [NC]
+    RewriteRule ^(.+\.htm)$ index.php?m=home&c=Index&a=index&clear=1&templet=$1 [QSA,PT,L]
+
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ index.php?s=/$1 [QSA,PT,L]
+</IfModule>
+
+DirectoryIndex index.php index.html

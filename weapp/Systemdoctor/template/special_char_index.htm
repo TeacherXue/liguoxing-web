@@ -1,0 +1,102 @@
+{include file="header.htm" /}
+<body style="background-color: #FFF; overflow: auto;">
+<div id="toolTipLayer" style="position: absolute; z-index: 9999; display: none; visibility: visible; left: 95px; top: 573px;"></div>
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <a class="back_xin" href="{:weapp_url('Systemdoctor/Systemdoctor/index')}" title="返回列表"><i class="iconfont e-fanhui"></i></a>
+            <div class="subject">
+                <h3>特殊字符</h3>
+                <h5></h5>
+            </div>
+        </div>
+    </div>
+    <!-- 操作说明 -->
+    <div id="explanation" class="explanation" style="color: rgb(44, 188, 163); background-color: rgb(237, 251, 248); width: 99%; height: 100%;">
+        <div id="checkZoom" class="title"><i class="fa fa-lightbulb-o"></i>
+            <h4 title="提示相关设置操作时应注意的要点">提示</h4>
+            <span title="收起提示" id="explanationZoom" style="display: block;"></span>
+        </div>
+        <ul>
+            <li>1、用于把数据库表中的标题、内容字段的编码改成utf8mb4</li>
+            <li>2、用于把数据库配置文件中编码改成utf8mb4，比如能支持小红书复制过来的emoji表情符号、特殊符号或字体</li>
+            <li>3、虚拟空间不一定能支持mysql编码utf8mb4，具体需要联系空间服务商确认</li>
+        </ul>
+    </div>
+    <form class="form-horizontal" id="form1"  method="post">
+        <div class="ncap-form-default">
+            <dl class="row" style="padding: 0px;">
+                <dt class="tit" style="width: 0px;"></dt>
+                <dd class="opt">
+                    <font color="red">涉及以下数据表，建议事先备份数据库，以防可能出现数据乱码等未知问题</font>
+                </dd>
+            </dl>
+            {volist name="$tableList" id="vo"}
+            <dl class="row" style="padding: 0px;">
+                <dt class="tit" style="width: 120px;">{$vo.name}</dt>
+                <dd class="opt">
+                    {$vo.table}
+                </dd>
+            </dl>
+            {/volist}
+            <div class="bot" style="padding-left: 35px; padding-top: 10px;">
+                <a class="ncap-btn-big ncap-btn-green" type="button" id="submitBtn" onclick="checkForm();">确认处理</a>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+<script type="text/javascript">
+    // 判断输入框是否为空
+    function checkForm(){
+        layer.confirm('确定要处理支持特殊字符？', {
+            shade: layer_shade,
+            area: ['480px', '190px'],
+            move: false,
+            title: '提示',
+            btnAlign:'r',
+            closeBtn: 3,
+            btn: ['执行', '取消'], //按钮
+            success: function () {
+                $(".layui-layer-content").css('text-align', 'left');
+            }
+        }, function () {
+            layer_loading('正在处理');
+            $.ajax({
+                type : 'post',
+                url : "{:weapp_url('Systemdoctor/Systemdoctor/special_char_index')}",
+                data : {_ajax:1},
+                dataType : 'json',
+                success : function(res){
+                    layer.closeAll();
+                    if(res.code == 1){
+                        layer.alert(res.msg, {
+                            shade: layer_shade,
+                            area: ['480px', '190px'],
+                            move: false,
+                            title: '提示',
+                            btnAlign:'r',
+                            closeBtn: 3,
+                            success: function () {
+                                $(".layui-layer-content").css('text-align', 'left');
+                            }
+                        }, function(){
+                            window.location.reload();
+                        });
+                    }else{
+                        showErrorAlert(res.msg);
+                    }
+                },
+                error: function(e){
+                    layer.closeAll();
+                    showErrorAlert(e.responseText);
+                }
+            });
+        }, function (index) {
+            layer.close(index);
+        });
+    }
+</script>
+{include file="footer.htm" /}

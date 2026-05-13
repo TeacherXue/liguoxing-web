@@ -1,0 +1,149 @@
+{include file="header.htm" /}
+<body style="background-color: rgb(255, 255, 255); overflow: auto; cursor: default; -moz-user-select: inherit;">
+<div id="append_parent"></div>
+<div id="ajaxwaitid"></div>
+<div class="page">
+    <div class="fixed-bar">
+        <div class="item-title">
+            <a class="back_xin" href="{:weapp_url('Systemdoctor/Systemdoctor/index')}" title="返回列表"><i class="iconfont e-fanhui"></i></a>
+            <div class="subject">
+                <h3>后台操作日志</h3>
+                <h5></h5>
+            </div>
+        </div>
+    </div>
+    <div class="flexigrid">
+        <div class="mDiv">
+            <div class="ftitle">
+                <h3>日志列表</h3>
+                <h5>(共{$pageObj->totalRows}条记录)</h5>
+            </div>
+            <div title="刷新数据" class="pReload"><i class="fa fa-refresh"></i></div>
+            <form class="navbar-form form-inline" action="{:weapp_url('Systemdoctor/Systemdoctor/admin_log')}" method="get" onsubmit="layer_loading('正在处理');">
+                {$searchform.hidden|default=''}
+                <div class="fbutton ml10">
+                    <a href="javascript:void(0);" data-href="{:weapp_url('Systemdoctor/Systemdoctor/admin_log_conf')}" onclick="conf(this);">
+                        <div class="add" title="配置">
+                            <span>配置</span>
+                        </div>
+                    </a>
+                </div>
+                <div class="sDiv">
+                    <div class="sDiv2">
+                        <input type="text" size="30" name="keywords" class="qsbox" placeholder="搜索相关数据...">
+                        <input type="submit" class="btn" value="搜索">
+                        <i class="iconfont e-sousuo"></i>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="hDiv">
+            <div class="hDivBox">
+                <table cellspacing="0" cellpadding="0" style="width: 100%">
+                    <thead>
+                    <tr>
+                        <th abbr="log_id" axis="col5" class="w40">
+                            <div class="tc">ID</div>
+                        </th>
+                        <th abbr="admin_id" axis="col3" class="w250">
+                            <div class="tc">操作人</div>
+                        </th>
+                        <th abbr="log_info" axis="col4">
+                            <div class="">操作信息</div>
+                        </th>
+                        <th abbr="log_ip" axis="col6" class="w100">
+                            <div class="tc">IP</div>
+                        </th>
+                        <th abbr="log_time" axis="col6" class="w160">
+                            <div class="tc">操作时间</div>
+                        </th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+        <div class="bDiv" style="height: auto;">
+            <div id="flexigrid" cellpadding="0" cellspacing="0" border="0">
+                <table style="width: 100%">
+                    <tbody>
+                    {empty name="list"}
+                    <tr>
+                        <td class="no-data" align="center" axis="col0" colspan="50">
+                            <i class="fa fa-exclamation-circle"></i>没有符合条件的记录
+                        </td>
+                    </tr>
+                    {else/}
+                    {volist name="list" id="vo"}
+                    <tr>
+                        <td class="sort">
+                            <div class="w40 tc">
+                                {$vo.log_id}
+                            </div>
+                        </td>
+                        <td class="">
+                            <div class="w250 tc">
+                                {eq name='$vo.admin_id' value='-1'}
+                                    游客
+                                {else /}
+                                    {$vo.user_name|default='———'}
+                                {/eq}
+                            </div>
+                        </td>
+                        <td style="width: 100%">
+                            <div style="">
+                                {$vo.log_info|htmlspecialchars_decode=###}
+                            </div>
+                        </td>
+                        <td class="">
+                            <div class="w100 tc">
+                                {$vo.log_ip}
+                            </div>
+                        </td>
+                        <td class="">
+                            <div class="w160 tc">
+                                {$vo.log_time|date='Y-m-d H:i:s',###}
+                            </div>
+                        </td>
+                    </tr>
+                    {/volist}
+                    {/empty}
+                    </tbody>
+                </table>
+            </div>
+            <div class="iDiv" style="display: none;"></div>
+        </div>
+        
+        <!--分页位置-->
+        {$pageStr}
+    </div>
+</div>
+<script>
+    $(document).ready(function(){
+        // 表格行点击选中切换
+        $('#flexigrid > table>tbody >tr').click(function(){
+            $(this).toggleClass('trSelected');
+        });
+
+        // 点击刷新数据
+        $('.fa-refresh').click(function(){
+            location.href = location.href;
+        });
+    });
+
+    function conf(obj)
+    {
+        var url = $(obj).attr('data-href');
+        //iframe窗
+        layer.open({
+            type: 2,
+            title: '配置信息',
+            fixed: true, //不固定
+            shadeClose: false,
+            shade: 0.3,
+            maxmin: false, //开启最大化最小化按钮
+            area: ['450px', '330px'],
+            content: url
+        });
+    }
+</script>
+{include file="footer.htm" /}
