@@ -1,3 +1,35 @@
+@font-face {
+  font-family: "Liguoxing Sans";
+  src: url("/fonts/Arial-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Liguoxing Sans";
+  src: url("/fonts/Arial-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Liguoxing Sans";
+  src: url("/fonts/Arial-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Liguoxing Sans";
+  src: url("/fonts/Arial-BoldItalic.ttf") format("truetype");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 :root {
   --navy: #0f4a32;
   --navy-2: #136544;
@@ -24,7 +56,7 @@ html {
 
 body {
   margin: 0;
-  font-family: "Aptos", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-family: "Liguoxing Sans", Arial, sans-serif;
   color: var(--ink);
   background: #ffffff;
   line-height: 1.45;
@@ -448,8 +480,8 @@ img {
 .hero {
   position: relative;
   overflow: hidden;
-  --hero-bg: url("../images/footer.jpg");
-  --hero-machine: url("../images/hero-slide-line.png");
+  --hero-bg: url("../images/footer.webp");
+  --hero-machine: url("../images/hero-slide-line.webp");
   height: 792px;
   min-height: 792px;
   color: #ffffff;
@@ -2497,7 +2529,7 @@ body.video-modal-open {
   color: #fff;
   background:
     linear-gradient(118deg, rgba(14, 102, 68, 0.88), rgba(18, 128, 85, 0.88)),
-    url("../images/footer.jpg") center / cover no-repeat;
+    url("../images/footer.webp") center / cover no-repeat;
   box-shadow: 0 16px 38px rgba(8, 72, 48, 0.18);
 }
 
@@ -2524,7 +2556,7 @@ body.video-modal-open {
   color: #ffffff;
   background:
     linear-gradient(90deg, rgba(12, 92, 62, 0.9), rgba(18, 118, 78, 0.78)),
-    url("../images/footer.jpg") center / cover no-repeat;
+    url("../images/footer.webp") center / cover no-repeat;
   border-bottom: 1px solid rgba(150, 230, 185, 0.55);
 }
 
@@ -3382,7 +3414,7 @@ body.video-modal-open {
   color: #f0fdf6;
   background:
     linear-gradient(90deg, rgba(14, 95, 64, 0.93), rgba(18, 118, 78, 0.88), rgba(14, 95, 64, 0.93)),
-    url("../images/footer.jpg") center / cover no-repeat;
+    url("../images/footer.webp") center / cover no-repeat;
   border-top: 1px solid rgba(170, 235, 200, 0.55);
 }
 

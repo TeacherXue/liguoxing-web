@@ -21,7 +21,7 @@ use think\Model;
  */
 class Download extends Model
 {
-    private const DOWNLOAD_TEMPLATE = 'download_detail.htm';
+    private const DOWNLOAD_TEMPLATE = 'view_download.htm';
 
     // 模型标识
     public $nid = 'download';
@@ -107,7 +107,7 @@ class Download extends Model
         if (empty($archive['htmlfilename'])) {
             $update['htmlfilename'] = $this->buildUniqueHtmlfilename((string) $archive['title'], (int) $archive['typeid'], (int) $archive['aid'], 'download');
         }
-        if (empty($archive['tempview']) || 'view_download.htm' === $archive['tempview']) {
+        if (empty($archive['tempview']) || 'download_detail.htm' === $archive['tempview']) {
             $update['tempview'] = self::DOWNLOAD_TEMPLATE;
         }
         if (!empty($update)) {

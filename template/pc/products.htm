@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="keywords" content="关键词">
+  <title>Redirecting to Equipment</title>
+  <link rel="canonical" href="{eyou:global name='web_basehost' /}/equipment.htm">
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var lang = params.get("lang");
+      var target = "/equipment.htm";
+      if (lang) target += "?lang=" + encodeURIComponent(lang);
+      window.location.replace(target);
+    })();
+  </script>
+  <noscript>
+    <meta http-equiv="refresh" content="0;url=/equipment.htm">
+  </noscript>
+</head>
+<body>
+  <p>Redirecting to <a href="/equipment.htm">Equipment</a>...</p>
+</body>
+</html>

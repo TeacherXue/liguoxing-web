@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="keywords" content="block bottomer manufacturer, block bottom machine direct factory, valve bag machinery factory, direct manufacturer of valve bag machines, woven bag production line, PP woven bag machine factory">
+  <title>Block Bottomer Manufacturer | LIGUOXING</title>
+  <meta name="description" content="Watch {$eyou.field.title} from LIGUOXING, a source factory for valve bag machines and woven sack production lines.">
+  <link rel="canonical" href="{eyou:global name='web_basehost' /}/video/{$eyou.field.htmlfilename}.htm">
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+  {eyou:include file="includes/header.htm" /}
+
+  <section class="page-hero detail-hero">
+    <div class="container">
+      <h1>{$eyou.field.title}</h1>
+      {eyou:notempty name='$eyou.field.subtitle'}
+      <p class="detail-hero-subtitle">{$eyou.field.subtitle}</p>
+      {eyou:else /}
+      <p class="detail-hero-summary">{$eyou.field.seo_description}</p>
+      {/eyou:notempty}
+    </div>
+  </section>
+
+  <main class="content-wrap detail-wrap">
+    <div class="container detail-layout">
+      <article class="detail-article news-detail-article">
+        <div class="detail-meta">
+          <span>{$eyou.field.typename}</span>
+          <time datetime="{$eyou.field.add_time|MyDate='Y-m-d',###}">{$eyou.field.add_time|MyDate='M d, Y',###}</time>
+        </div>
+        <button class="video-preview detail-video-preview" type="button" data-video-trigger data-video-src="{$eyou.field.youtube_url}" data-video-title="{$eyou.field.title}" aria-label="Play {$eyou.field.title}">
+          <img src="{$eyou.field.litpic}" alt="{$eyou.field.title}">
+          <span class="video-play-mark" aria-hidden="true"></span>
+        </button>
+        <div class="news-richtext">
+          {$eyou.field.content}
+        </div>
+      </article>
+      <aside class="detail-aside">
+        <div class="detail-side-card dark-side-card">
+          <h3>Video Playback</h3>
+          <p>{$eyou.field.add_time|MyDate='M d, Y',###}</p>
+          <p>Equipment demos, company introductions, and project presentation clips.</p>
+        </div>
+        <div class="detail-side-card related-list">
+          <h3>More Videos</h3>
+          {eyou:arclist typeid='4' row='4' orderby='add_time' ordermode='desc'}
+          {eyou:neq name='$field.aid' value='$eyou.field.aid'}
+          <a href="/video/{$field.htmlfilename}.htm">{$field.title}</a>
+          {/eyou:neq}
+          {/eyou:arclist}
+        </div>
+        <a class="btn btn-primary detail-cta-button" href="/video.htm">Back to Video <b>-></b></a>
+      </aside>
+    </div>
+  </main>
+
+  {eyou:include file="includes/footer.htm" /}
+  <script src="/js/site-shell.js?v=20260511-contact"></script>
+  <script src="/js/i18n-auto-dict.js"></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/company-video-modal.js"></script>
+</body>
+</html>

@@ -21,8 +21,8 @@ use think\Model;
  */
 class Article extends Model
 {
-    private const NEWS_TEMPLATE = 'news_detail.htm';
-    private const VIDEO_TEMPLATE = 'video_detail.htm';
+    private const NEWS_TEMPLATE = 'view_article_news.htm';
+    private const VIDEO_TEMPLATE = 'view_article_video.htm';
 
     //初始化
     protected function initialize()
@@ -94,14 +94,14 @@ class Article extends Model
             if (empty($archive['htmlfilename'])) {
                 $update['htmlfilename'] = $this->buildUniqueHtmlfilename((string) $archive['title'], (int) $archive['typeid'], (int) $archive['aid'], 'news');
             }
-            if (empty($archive['tempview']) || 'view_article.htm' === $archive['tempview']) {
+            if (empty($archive['tempview']) || in_array($archive['tempview'], ['view_article.htm', 'news_detail.htm'], true)) {
                 $update['tempview'] = self::NEWS_TEMPLATE;
             }
         } elseif ('video' === $dirname) {
             if (empty($archive['htmlfilename'])) {
                 $update['htmlfilename'] = $this->buildUniqueHtmlfilename((string) $archive['title'], (int) $archive['typeid'], (int) $archive['aid'], 'video');
             }
-            if (empty($archive['tempview']) || 'view_article.htm' === $archive['tempview']) {
+            if (empty($archive['tempview']) || in_array($archive['tempview'], ['view_article.htm', 'video_detail.htm'], true)) {
                 $update['tempview'] = self::VIDEO_TEMPLATE;
             }
 

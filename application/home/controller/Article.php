@@ -100,6 +100,6 @@ class Article extends Base
         $this->jumpRewriteFormat($aid, $arctypeInfo['dirname'], 'view');
         /*--end*/
 
-        return action('home/View/index', $aid);
+        return action('home/View/index', ['aid' => $aid, 'dirname' => $arctypeInfo['dirname']]);
     }
 }

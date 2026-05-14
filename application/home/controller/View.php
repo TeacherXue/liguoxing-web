@@ -168,6 +168,13 @@ class View extends Base
             /*URL上参数的校验*/
             if (3 == $seo_pseudo) {
                 $dirname            = input('param.dirname/s');
+                if (empty($dirname)) {
+                    $pathinfo = trim((string) $this->request->pathinfo(), '/');
+                    if ($pathinfo !== '') {
+                        $segments = explode('/', $pathinfo);
+                        $dirname = !empty($segments[0]) ? $segments[0] : '';
+                    }
+                }
                 $dirname2           = '';
                 $seo_rewrite_format = config('ey_config.seo_rewrite_format');
                 if (1 == $seo_rewrite_format) {

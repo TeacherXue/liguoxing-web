@@ -34,8 +34,6 @@
         active = path === "/news.htm" || path === "/news.html" || path.indexOf("/news/") === 0;
       } else if (href === "/video.htm" || href === "/video.html") {
         active = path === "/video.htm" || path === "/video.html" || path.indexOf("/video/") === 0;
-      } else if (href === "/cases.htm" || href === "/cases.html") {
-        active = path === "/cases.htm" || path === "/cases.html" || path.indexOf("/cases/") === 0;
       } else {
         active = path === href || path.endsWith(href);
       }
@@ -120,33 +118,7 @@
     syncExpanded();
   }
 
-  function injectPartials() {
-    var headerHost = document.getElementById("site-header");
-    var footerHost = document.getElementById("site-footer");
-    if (!headerHost || !footerHost) {
-      setActiveNav();
-      bindMobileNav();
-      return Promise.resolve();
-    }
-
-    function load(name) {
-      return fetch("/includes/" + name + ".htm", { cache: "no-cache" }).then(function (r) {
-        if (!r.ok) throw new Error("Failed to load partial: " + name);
-        return r.text();
-      });
-    }
-
-    return Promise.all([load("header"), load("footer")])
-      .then(function (parts) {
-        headerHost.outerHTML = parts[0].trim();
-        footerHost.outerHTML = parts[1].trim();
-        setActiveNav();
-        bindMobileNav();
-      })
-      .catch(function (err) {
-        console.error("[site-shell]", err);
-      });
-  }
-
-  window.siteShellReady = injectPartials();
+  setActiveNav();
+  bindMobileNav();
+  window.siteShellReady = Promise.resolve();
 })();

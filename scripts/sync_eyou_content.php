@@ -26,13 +26,13 @@ $pdo = new PDO($dsn, $config['user'], $config['pass'], [
 $prefix = $config['prefix'];
 $now = time();
 
-$channelStmt = $pdo->query("SELECT nid, id FROM {$prefix}channeltype WHERE nid IN ('article', 'guestbook', 'download')");
+$channelStmt = $pdo->query("SELECT nid, id FROM {$prefix}channeltype WHERE nid IN ('article', 'guestbook', 'download', 'single')");
 $channelIds = [];
 foreach ($channelStmt as $row) {
     $channelIds[$row['nid']] = (int) $row['id'];
 }
 
-if (empty($channelIds['article']) || empty($channelIds['guestbook']) || empty($channelIds['download'])) {
+if (empty($channelIds['article']) || empty($channelIds['guestbook']) || empty($channelIds['download']) || empty($channelIds['single'])) {
     throw new RuntimeException('Missing required EyouCMS channel types.');
 }
 
@@ -43,6 +43,152 @@ $videoTypeId = 4;
 $newsKeywords = 'woven packaging machinery, PP woven bag making machine, woven bag production line, industrial bag making machine, turnkey woven bag production line';
 $downloadKeywords = 'woven packaging machinery, block bottom valve bag making machine, PP woven bag making machine, woven sack conversion line, PP woven fabric coating machine';
 $videoKeywords = 'block bottom valve bag making machine video, woven bag production line video, industrial bag making machine video, PP woven sack production line video, woven packaging machinery video';
+$singlePages = [
+    [
+        'id' => 5,
+        'parent_id' => 0,
+        'topid' => 5,
+        'grade' => 1,
+        'typename' => 'About Us',
+        'dirname' => 'about',
+        'dirpath' => '/about',
+        'diy_dirpath' => 'about',
+        'rulelist' => 'about.htm',
+        'templist' => 'lists_single_about.htm',
+        'seo_title' => 'Valve Bag Machinery Factory | LIGUOXING',
+        'seo_keywords' => 'valve bag machinery factory, woven sack machinery supplier, direct manufacturer of valve bag machines, China block bottom bag machine factory, block bottomer manufacturer, PP woven bag machine factory',
+        'seo_description' => 'Learn about LIGUOXING as a valve bag machinery factory with in-house manufacturing, engineering, and global delivery for woven sack production equipment.',
+        'sort_order' => 70,
+    ],
+    [
+        'id' => 6,
+        'parent_id' => 0,
+        'topid' => 6,
+        'grade' => 1,
+        'typename' => 'Applications',
+        'dirname' => 'applications',
+        'dirpath' => '/applications',
+        'diy_dirpath' => 'applications',
+        'rulelist' => 'application.htm',
+        'templist' => 'lists_single_application.htm',
+        'seo_title' => 'Cement Valve Bag Production Line | LIGUOXING',
+        'seo_keywords' => 'Cement Valve Bag Production Line, woven bag production line, turnkey woven bag production line, valve sack production line, direct manufacturer of valve bag machines, woven sack machinery supplier',
+        'seo_description' => 'Application scenarios for cement valve bag production, open-mouth sacks, powder bagging, and downstream automation from LIGUOXING.',
+        'sort_order' => 65,
+    ],
+    [
+        'id' => 7,
+        'parent_id' => 6,
+        'topid' => 6,
+        'grade' => 2,
+        'typename' => 'Cement Valve Bags',
+        'dirname' => 'cement-valve-bags',
+        'dirpath' => '/applications/cement-valve-bags',
+        'diy_dirpath' => 'applications/cement-valve-bags',
+        'rulelist' => 'applications/cement-valve-bags.htm',
+        'templist' => 'lists_single_application_cement_valve_bags.htm',
+        'seo_title' => 'Cement Valve Bag Making Machine | LIGUOXING',
+        'seo_keywords' => 'cement valve bag making machine, cement packaging bag machine, dry mortar valve bag machine, valve bag machinery factory, block bottom valve bag machine manufacturer, direct manufacturer of valve bag machines',
+        'seo_description' => 'Cement and dry mortar valve bag application guidance from a direct manufacturer of industrial woven bag machinery.',
+        'sort_order' => 64,
+    ],
+    [
+        'id' => 8,
+        'parent_id' => 6,
+        'topid' => 6,
+        'grade' => 2,
+        'typename' => 'Open-Mouth Bags',
+        'dirname' => 'open-mouth-bags',
+        'dirpath' => '/applications/open-mouth-bags',
+        'diy_dirpath' => 'applications/open-mouth-bags',
+        'rulelist' => 'applications/open-mouth-bags.htm',
+        'templist' => 'lists_single_application_open_mouth_bags.htm',
+        'seo_title' => 'Open Mouth Bag Making Machine | LIGUOXING',
+        'seo_keywords' => 'open mouth bag making machine, welded open mouth sack machine, woven open mouth bag conversion line, valve bag machinery factory, custom valve bag making machine, woven sack machinery supplier',
+        'seo_description' => 'Open-mouth woven sack application guidance for industrial bag conversion from LIGUOXING.',
+        'sort_order' => 63,
+    ],
+    [
+        'id' => 9,
+        'parent_id' => 6,
+        'topid' => 6,
+        'grade' => 2,
+        'typename' => 'Powder & Mineral Bagging',
+        'dirname' => 'powder-mineral-bagging',
+        'dirpath' => '/applications/powder-mineral-bagging',
+        'diy_dirpath' => 'applications/powder-mineral-bagging',
+        'rulelist' => 'applications/powder-mineral-bagging.htm',
+        'templist' => 'lists_single_application_powder_mineral_bagging.htm',
+        'seo_title' => 'Woven Valve Bag Making Machine | LIGUOXING',
+        'seo_keywords' => 'woven valve bag making machine, cement packaging bag machine, dry mortar valve bag machine, woven sack machinery supplier, direct manufacturer of valve bag machines, valve sack production line',
+        'seo_description' => 'Powder and mineral bagging application support for customers who need repeatable sealing and robust finished sacks.',
+        'sort_order' => 62,
+    ],
+    [
+        'id' => 10,
+        'parent_id' => 6,
+        'topid' => 6,
+        'grade' => 2,
+        'typename' => 'Downstream Automation',
+        'dirname' => 'downstream-automation',
+        'dirpath' => '/applications/downstream-automation',
+        'diy_dirpath' => 'applications/downstream-automation',
+        'rulelist' => 'applications/downstream-automation.htm',
+        'templist' => 'lists_single_application_downstream_automation.htm',
+        'seo_title' => 'Valve Sack Production Line | LIGUOXING',
+        'seo_keywords' => 'valve sack production line, turnkey woven bag production line, woven bag production line, direct manufacturer of valve bag machines, valve bag machinery factory, custom valve bag making machine',
+        'seo_description' => 'Downstream conveying, counting, and handling workflow support for integrated valve sack production lines.',
+        'sort_order' => 61,
+    ],
+    [
+        'id' => 11,
+        'parent_id' => 0,
+        'topid' => 11,
+        'grade' => 1,
+        'typename' => 'Equipment',
+        'dirname' => 'equipment',
+        'dirpath' => '/equipment',
+        'diy_dirpath' => 'equipment',
+        'rulelist' => 'equipment.htm',
+        'templist' => 'lists_single_equipment.htm',
+        'seo_title' => 'Block Bottom Valve Bag Making Machine | LIGUOXING',
+        'seo_keywords' => 'Block Bottom Valve Bag Making Machine, block bottom valve bag machine manufacturer, block bottomer manufacturer, cement bag making machine manufacturer, direct manufacturer of valve bag machines, fully automatic block bottomer factory',
+        'seo_description' => 'Block bottom valve bag making machine from LIGUOXING, a direct factory supplying automated valve sack production equipment.',
+        'sort_order' => 55,
+    ],
+    [
+        'id' => 12,
+        'parent_id' => 11,
+        'topid' => 11,
+        'grade' => 2,
+        'typename' => 'Twin Extruder Lamination',
+        'dirname' => 'equipment-sfh-800',
+        'dirpath' => '/equipment-sfh-800',
+        'diy_dirpath' => 'equipment-sfh-800',
+        'rulelist' => 'equipment-sfh-800.htm',
+        'templist' => 'lists_single_equipment_sfh_800.htm',
+        'seo_title' => 'PP Woven Fabric Lamination Machine Manufacturer | LIGUOXING',
+        'seo_keywords' => 'PP woven fabric lamination machine manufacturer, woven bag printing machine factory, PP woven bag machine factory, woven sack machinery supplier, direct manufacturer of valve bag machines, turnkey woven bag production line',
+        'seo_description' => 'Twin extruder lamination equipment for PP woven fabric and BOPP laminated bag workflows from LIGUOXING.',
+        'sort_order' => 54,
+    ],
+    [
+        'id' => 13,
+        'parent_id' => 11,
+        'topid' => 11,
+        'grade' => 2,
+        'typename' => 'Woven Bag Printing Machine',
+        'dirname' => 'equipment-gy-800',
+        'dirpath' => '/equipment-gy-800',
+        'diy_dirpath' => 'equipment-gy-800',
+        'rulelist' => 'equipment-gy-800.htm',
+        'templist' => 'lists_single_equipment_gy_800.htm',
+        'seo_title' => 'Woven Bag Printing Machine Factory | LIGUOXING',
+        'seo_keywords' => 'woven bag printing machine factory, PP woven bag machine factory, woven sack machinery supplier, valve bag machinery factory, direct manufacturer of valve bag machines, custom valve bag making machine',
+        'seo_description' => 'Woven bag printing equipment for industrial packaging lines from LIGUOXING.',
+        'sort_order' => 53,
+    ],
+];
 
 $articles = [
     [
@@ -428,8 +574,8 @@ SQL;
         'rulelist' => 'news.htm',
         'ruleview' => 'news/{aid}.htm',
         'grade' => 1,
-        'templist' => 'news.htm',
-        'tempview' => 'news_detail.htm',
+        'templist' => 'lists_article_news.htm',
+        'tempview' => 'view_article_news.htm',
         'seo_title' => 'Latest News | LIGUOXING',
         'seo_keywords' => $newsKeywords,
         'seo_description' => 'LIGUOXING technical, delivery, application, and service updates for industrial bag making equipment.',
@@ -458,20 +604,20 @@ SQL;
         'current_channel' => $channelIds['guestbook'],
         'parent_id' => 0,
         'topid' => $messageTypeId,
-        'typename' => 'Message',
-        'dirname' => 'message',
-        'dirpath' => '/message',
-        'diy_dirpath' => 'message',
-        'rulelist' => 'message.htm',
+        'typename' => 'Contact',
+        'dirname' => 'contact',
+        'dirpath' => '/contact',
+        'diy_dirpath' => 'contact',
+        'rulelist' => 'contact.htm',
         'ruleview' => '',
         'grade' => 1,
-        'templist' => '',
+        'templist' => 'lists_guestbook.htm',
         'tempview' => '',
-        'seo_title' => 'Message',
-        'seo_keywords' => 'message, inquiry, liguoxing',
-        'seo_description' => 'Business inquiry form configuration for LIGUOXING.',
+        'seo_title' => 'Direct Manufacturer of Valve Bag Machines | LIGUOXING',
+        'seo_keywords' => 'direct manufacturer of valve bag machines, valve bag machinery factory, woven sack machinery supplier, China block bottom bag machine factory, custom valve bag making machine, block bottom machine direct factory',
+        'seo_description' => 'Contact LIGUOXING, a direct manufacturer of valve bag machines and woven sack production equipment, for factory quotations and project planning.',
         'sort_order' => 90,
-        'is_hidden' => 1,
+        'is_hidden' => 0,
         'is_part' => 0,
         'admin_id' => 1,
         'is_del' => 0,
@@ -502,8 +648,8 @@ SQL;
         'rulelist' => 'download.htm',
         'ruleview' => 'download/{aid}.htm',
         'grade' => 1,
-        'templist' => 'download.htm',
-        'tempview' => 'download_detail.htm',
+        'templist' => 'lists_download.htm',
+        'tempview' => 'view_download.htm',
         'seo_title' => 'Download | LIGUOXING',
         'seo_keywords' => $downloadKeywords,
         'seo_description' => 'Download brochures, technical profiles, and process documents for project communication.',
@@ -539,8 +685,8 @@ SQL;
         'rulelist' => 'video.htm',
         'ruleview' => 'video/{aid}.htm',
         'grade' => 1,
-        'templist' => 'video.htm',
-        'tempview' => 'video_detail.htm',
+        'templist' => 'lists_article_video.htm',
+        'tempview' => 'view_article_video.htm',
         'seo_title' => 'Video | LIGUOXING',
         'seo_keywords' => $videoKeywords,
         'seo_description' => 'Video list for LIGUOXING equipment demonstrations, factory introductions, and project presentation clips.',
@@ -562,6 +708,45 @@ SQL;
         'page_limit' => '',
         'total_arc' => count($videos),
     ]);
+
+    foreach ($singlePages as $page) {
+        $arctypeStmt->execute([
+            'id' => $page['id'],
+            'channeltype' => $channelIds['single'],
+            'current_channel' => $channelIds['single'],
+            'parent_id' => $page['parent_id'],
+            'topid' => $page['topid'],
+            'typename' => $page['typename'],
+            'dirname' => $page['dirname'],
+            'dirpath' => $page['dirpath'],
+            'diy_dirpath' => $page['diy_dirpath'],
+            'rulelist' => $page['rulelist'],
+            'ruleview' => '',
+            'grade' => $page['grade'],
+            'templist' => $page['templist'],
+            'tempview' => '',
+            'seo_title' => $page['seo_title'],
+            'seo_keywords' => $page['seo_keywords'],
+            'seo_description' => $page['seo_description'],
+            'sort_order' => $page['sort_order'],
+            'is_hidden' => 0,
+            'is_part' => 0,
+            'admin_id' => 1,
+            'is_del' => 0,
+            'del_method' => 0,
+            'status' => 1,
+            'is_release' => 0,
+            'lang' => 'cn',
+            'add_time' => $now,
+            'update_time' => $now,
+            'target' => 0,
+            'nofollow' => 0,
+            'typearcrank' => 0,
+            'empty_logic' => 0,
+            'page_limit' => '',
+            'total_arc' => 0,
+        ]);
+    }
 
     $pdo->prepare("DELETE FROM {$prefix}guestbook_attribute WHERE typeid = :typeid AND form_type = 0")
         ->execute(['typeid' => $messageTypeId]);
@@ -609,6 +794,8 @@ SQL;
                 seo_description = :seo_description,
                 tempview = :tempview,
                 status = 1,
+                is_del = 0,
+                del_method = 0,
                 sort_order = :sort_order,
                 admin_id = 1,
                 htmlfilename = :htmlfilename,
@@ -638,6 +825,37 @@ SQL;
                 update_time = :update_time
           WHERE aid = :aid"
     );
+    $findSingleContentStmt = $pdo->prepare("SELECT id, aid FROM {$prefix}single_content WHERE typeid = :typeid LIMIT 1");
+    $insertSingleContentStmt = $pdo->prepare(
+        "INSERT INTO {$prefix}single_content (aid, typeid, content, content_ey_m, add_time, update_time)
+         VALUES (:aid, :typeid, :content, '', :add_time, :update_time)"
+    );
+    $updateSingleContentStmt = $pdo->prepare(
+        "UPDATE {$prefix}single_content
+            SET content = :content,
+                update_time = :update_time
+          WHERE id = :id"
+    );
+
+    foreach ($singlePages as $page) {
+        $findSingleContentStmt->execute(['typeid' => $page['id']]);
+        $singleRow = $findSingleContentStmt->fetch();
+        if ($singleRow) {
+            $updateSingleContentStmt->execute([
+                'id' => (int) $singleRow['id'],
+                'content' => '',
+                'update_time' => $now,
+            ]);
+        } else {
+            $insertSingleContentStmt->execute([
+                'aid' => $page['id'],
+                'typeid' => $page['id'],
+                'content' => '',
+                'add_time' => $now,
+                'update_time' => $now,
+            ]);
+        }
+    }
 
     $sortOrder = count($articles);
     foreach ($articles as $article) {
@@ -655,7 +873,7 @@ SQL;
             'seo_title' => $article['title'] . ' | News | LIGUOXING',
             'seo_keywords' => $article['keywords'],
             'seo_description' => $article['description'],
-            'tempview' => 'news_detail.htm',
+            'tempview' => 'view_article_news.htm',
             'sort_order' => $sortOrder--,
             'htmlfilename' => $article['slug'],
             'add_time' => $timestamp,
@@ -731,7 +949,7 @@ SQL;
             'seo_title' => $download['title'] . ' | Download | LIGUOXING',
             'seo_keywords' => $download['keywords'],
             'seo_description' => $download['description'],
-            'tempview' => 'download_detail.htm',
+            'tempview' => 'view_download.htm',
             'sort_order' => $sortOrder--,
             'htmlfilename' => $download['slug'],
             'add_time' => $timestamp,
@@ -804,7 +1022,7 @@ SQL;
             'seo_title' => $video['title'] . ' | Video | LIGUOXING',
             'seo_keywords' => $video['keywords'],
             'seo_description' => $video['description'],
-            'tempview' => 'video_detail.htm',
+            'tempview' => 'view_article_video.htm',
             'sort_order' => $sortOrder--,
             'htmlfilename' => $video['slug'],
             'add_time' => $timestamp,
@@ -847,7 +1065,7 @@ SQL;
     }
 
     $normalizeStmt = $pdo->prepare("SELECT aid, title, htmlfilename, tempview FROM {$prefix}archives WHERE typeid = :typeid ORDER BY aid ASC");
-    $normalizeUpdateStmt = $pdo->prepare("UPDATE {$prefix}archives SET htmlfilename = :htmlfilename, tempview = :tempview, update_time = :update_time WHERE aid = :aid");
+    $normalizeUpdateStmt = $pdo->prepare("UPDATE {$prefix}archives SET htmlfilename = :htmlfilename, tempview = :tempview, status = 1, is_del = 0, del_method = 0, update_time = :update_time WHERE aid = :aid");
 
     $normalizeStmt->execute(['typeid' => $newsTypeId]);
     foreach ($normalizeStmt->fetchAll() as $row) {
@@ -856,8 +1074,8 @@ SQL;
             $htmlfilename = uniqueSlug($pdo, "{$prefix}archives", 'news', $newsTypeId, (int) $row['aid'], (string) $row['title']);
         }
         $tempview = (string) $row['tempview'];
-        if ($tempview === '' || $tempview === 'view_article.htm') {
-            $tempview = 'news_detail.htm';
+        if ($tempview === '' || in_array($tempview, ['view_article.htm', 'news_detail.htm'], true)) {
+            $tempview = 'view_article_news.htm';
         }
         $normalizeUpdateStmt->execute([
             'aid' => (int) $row['aid'],
@@ -874,8 +1092,8 @@ SQL;
             $htmlfilename = uniqueSlug($pdo, "{$prefix}archives", 'download', $downloadTypeId, (int) $row['aid'], (string) $row['title']);
         }
         $tempview = (string) $row['tempview'];
-        if ($tempview === '' || $tempview === 'view_download.htm') {
-            $tempview = 'download_detail.htm';
+        if ($tempview === '' || $tempview === 'download_detail.htm') {
+            $tempview = 'view_download.htm';
         }
         $normalizeUpdateStmt->execute([
             'aid' => (int) $row['aid'],
@@ -892,8 +1110,8 @@ SQL;
             $htmlfilename = uniqueSlug($pdo, "{$prefix}archives", 'video', $videoTypeId, (int) $row['aid'], (string) $row['title']);
         }
         $tempview = (string) $row['tempview'];
-        if ($tempview === '' || $tempview === 'view_article.htm') {
-            $tempview = 'video_detail.htm';
+        if ($tempview === '' || in_array($tempview, ['view_article.htm', 'video_detail.htm'], true)) {
+            $tempview = 'view_article_video.htm';
         }
         $normalizeUpdateStmt->execute([
             'aid' => (int) $row['aid'],
@@ -925,7 +1143,7 @@ SQL;
 
     $pdo->commit();
 
-    echo "Synced EyouCMS news, downloads, message, and video content.\n";
+    echo "Synced EyouCMS pages, news, downloads, contact, and video content.\n";
 } catch (Throwable $exception) {
     $pdo->rollBack();
     fwrite(STDERR, $exception->getMessage() . "\n");

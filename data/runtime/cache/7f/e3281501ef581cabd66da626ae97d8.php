@@ -1,0 +1,4 @@
+<?php
+//000000000000
+ exit();?>
+a:4:{s:32:"fd456406745d816a45cae554c788e754";a:7:{s:2:"id";i:3;s:9:"parent_id";i:0;s:7:"dirname";s:8:"download";s:5:"grade";i:1;s:12:"has_children";i:0;s:5:"level";i:0;s:8:"tdirname";s:8:"download";}s:32:"421b47ffd946ca083b65cd668c6b17e6";a:7:{s:2:"id";i:4;s:9:"parent_id";i:0;s:7:"dirname";s:5:"video";s:5:"grade";i:1;s:12:"has_children";i:0;s:5:"level";i:0;s:8:"tdirname";s:5:"video";}s:32:"78e731027d8fd50ed642340b7c9a63b3";a:7:{s:2:"id";i:2;s:9:"parent_id";i:0;s:7:"dirname";s:7:"message";s:5:"grade";i:1;s:12:"has_children";i:0;s:5:"level";i:0;s:8:"tdirname";s:7:"message";}s:32:"508c75c8507a2ae5223dfd2faeb98122";a:7:{s:2:"id";i:1;s:9:"parent_id";i:0;s:7:"dirname";s:4:"news";s:5:"grade";i:1;s:12:"has_children";i:0;s:5:"level";i:0;s:8:"tdirname";s:4:"news";}}
