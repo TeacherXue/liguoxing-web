@@ -1,45 +1,16 @@
 (function () {
-  /**
-   * 每位数字独立竖直滚轴：偶数位从上往下「卷入」，奇数位从下往上「卷入」（交替）。
-   */
-  function createDigitRoller(targetDigit, digitCol, spinBase, durationMs, delayMs) {
-    var repeats = 8;
-    var wrap = document.createElement("span");
-    wrap.className = "digit-roller";
-    var track = document.createElement("span");
-    track.className = "digit-roller-track";
-
-    for (var r = 0; r < repeats; r++) {
-      for (var d = 0; d <= 9; d++) {
-        var cell = document.createElement("span");
-        cell.className = "digit-roller-cell";
-        cell.textContent = String(d);
-        track.appendChild(cell);
-      }
-    }
-    wrap.appendChild(track);
-
-    var cycleLen = 10;
-    var prefixLoops = 5;
-    var finalIdx = prefixLoops * cycleLen + targetDigit;
-    var spinCells = spinBase + digitCol * 3;
-    var fromTop = digitCol % 2 === 0;
-
-    wrap.dataset.finalIndex = String(finalIdx);
-    wrap.dataset.spinCells = String(spinCells);
-    wrap.dataset.fromTop = fromTop ? "1" : "0";
-    wrap.dataset.delayMs = String(delayMs);
-    wrap.dataset.durationMs = String(durationMs);
-    return wrap;
+  function randomDigit() {
+    return String(Math.floor(Math.random() * 10));
   }
 
-  function runDigitRoll(valEl, finalStr, rowDelay) {
+  /**
+   * 加载时数字快速随机切换，间隔逐渐拉长，约 1s 后停在目标值。
+   */
+  function runDigitShuffle(valEl, finalStr) {
     valEl.innerHTML = "";
     valEl.classList.add("metric-value--roll");
 
-    var spinBase = 24;
-    var durationMs = 1000;
-    var digitCol = 0;
+    var digitEls = [];
     var frag = document.createDocumentFragment();
 
     for (var i = 0; i < finalStr.length; i++) {
@@ -50,53 +21,43 @@
         sep.textContent = "-";
         frag.appendChild(sep);
       } else if (ch >= "0" && ch <= "9") {
-        var d = parseInt(ch, 10);
-        frag.appendChild(createDigitRoller(d, digitCol, spinBase, durationMs, rowDelay + digitCol * 76));
-        digitCol += 1;
+        var span = document.createElement("span");
+        span.className = "metric-shuffle-digit";
+        span.textContent = randomDigit();
+        span.dataset.final = ch;
+        digitEls.push(span);
+        frag.appendChild(span);
       }
     }
     valEl.appendChild(frag);
 
-    requestAnimationFrame(function () {
-      var sample = valEl.querySelector(".digit-roller-cell");
-      var h = sample ? sample.getBoundingClientRect().height : 0;
-      if (!h) return;
+    if (!digitEls.length) return;
 
-      var rollers = valEl.querySelectorAll(".digit-roller");
-      rollers.forEach(function (roller) {
-        var track = roller.querySelector(".digit-roller-track");
-        if (!track) return;
+    var durationMs = 1000;
+    var anchor = performance.now();
+    var lastTick = anchor;
 
-        var finalIdx = parseInt(roller.dataset.finalIndex, 10);
-        var spinCells = parseInt(roller.dataset.spinCells, 10);
-        var fromTop = roller.dataset.fromTop === "1";
-        var delayMs = parseInt(roller.dataset.delayMs, 10) || 0;
-        var dur = parseInt(roller.dataset.durationMs, 10) || 1000;
-
-        var startIdx;
-        var endIdx = finalIdx;
-        if (fromTop) {
-          startIdx = finalIdx + spinCells;
-        } else {
-          startIdx = Math.max(0, finalIdx - spinCells);
-        }
-
-        var startPx = -startIdx * h;
-        var endPx = -endIdx * h;
-
-        track.style.transform = "translateY(" + startPx + "px)";
-        track.style.transition = "none";
-
-        requestAnimationFrame(function () {
-          requestAnimationFrame(function () {
-            track.style.transition =
-              "transform " + dur + "ms cubic-bezier(0.22, 1, 0.36, 1)";
-            track.style.transitionDelay = delayMs + "ms";
-            track.style.transform = "translateY(" + endPx + "px)";
-          });
+    var tickId = window.setInterval(function () {
+      var now = performance.now();
+      var elapsed = now - anchor;
+      if (elapsed >= durationMs) {
+        digitEls.forEach(function (el) {
+          el.textContent = el.dataset.final;
         });
-      });
-    });
+        window.clearInterval(tickId);
+        return;
+      }
+
+      var u = elapsed / durationMs;
+      var intervalMs = 22 + u * u * 240;
+
+      if (now - lastTick >= intervalMs) {
+        digitEls.forEach(function (el) {
+          el.textContent = randomDigit();
+        });
+        lastTick = now;
+      }
+    }, 16);
   }
 
   function finalStringForRow(row) {
@@ -140,7 +101,7 @@
         window.setTimeout(function () {
           var text = finalStringForRow(row);
           if (!text) return;
-          runDigitRoll(valEl, text, 0);
+          runDigitShuffle(valEl, text);
         }, rowDelay + 48);
       });
     }
@@ -154,7 +115,7 @@
           }
         });
       },
-      { threshold: 0.28, rootMargin: "0px 0px -5% 0px" }
+      { threshold: 0.08, rootMargin: "0px 0px 0px 0px" }
     );
 
     observer.observe(strip);

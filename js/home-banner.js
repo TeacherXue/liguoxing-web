@@ -18,7 +18,7 @@
   const slides = [
     {
       bg: 'url("/images/footer.jpg")',
-      machine: 'url("/images/hero-slide-line.png")',
+      machine: 'url("/images/hero-slide-line.webp")',
       kicker: "Manufacturer <i></i> Factory <i></i> Direct",
       title:
         'Direct Block Bottomer Machine<br><span>Manufacturer</span>',
@@ -28,8 +28,8 @@
       secondary: "Request a Quote",
     },
     {
-      bg: 'url("/images/home.jpg")',
-      machine: 'url("/images/hero-slide-unwind.png")',
+      bg: 'url("/images/home.webp")',
+      machine: 'url("/images/hero-slide-unwind.webp")',
       kicker: "Automation <i></i> Welding <i></i> Servo",
       title:
         'Advanced Hot Air<br><span>Welding Technology</span>',
@@ -39,8 +39,8 @@
       secondary: "Request a Quote",
     },
     {
-      bg: 'url("/images/p1.jpg")',
-      machine: 'url("/images/hero-slide-process.png")',
+      bg: 'url("/images/p1.webp")',
+      machine: 'url("/images/hero-slide-process.webp")',
       kicker: "Global <i></i> Proven <i></i> Export",
       title:
         'Trusted By Global<br><span>Packaging Plants</span>',

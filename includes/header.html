@@ -7,7 +7,25 @@
         <div class="logo-mark">Industrial Equipment</div>
       </div>
     </a>
-    <div class="nav-right">
+    <button
+      type="button"
+      class="nav-drawer-toggle"
+      data-nav-drawer-toggle
+      aria-expanded="false"
+      aria-controls="nav-drawer-panel"
+    >
+      <span class="nav-drawer-toggle-bars" aria-hidden="true"></span>
+      <span class="visually-hidden" data-i18n-key="nav.more">More</span>
+    </button>
+    <div class="nav-drawer-backdrop" data-nav-drawer-close tabindex="-1" aria-hidden="true"></div>
+    <div class="nav-right" id="nav-drawer-panel">
+      <div class="nav-drawer-panel-head">
+        <span class="nav-drawer-panel-title" data-i18n-key="nav.more">More</span>
+        <button type="button" class="nav-drawer-panel-close" data-nav-drawer-close-btn>
+          <span class="visually-hidden" data-i18n-key="nav.drawerClose">Close</span>
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
       <nav class="nav" aria-label="Main Navigation">
         <a href="/" data-i18n-key="nav.home">Home</a>
         <a href="/about.html" data-i18n-key="nav.about">About Us</a>
@@ -23,7 +41,7 @@
           </div>
         </div>
         <a href="/application.html" data-i18n-key="nav.applications">Applications</a>
-        <a href="/cases.html" data-i18n-key="nav.cases">Cases</a>
+        <a href="/videos.html" data-i18n-key="nav.videos">Videos</a>
         <a href="/news.html" data-i18n-key="nav.news">News</a>
         <a href="/contact.html" data-i18n-key="nav.contact">Contact</a>
         <a href="/download.html" data-i18n-key="nav.download">Download</a>
