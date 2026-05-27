@@ -99,15 +99,34 @@
     );
   }
 
+  function partialBase() {
+    var link = document.querySelector('link[href*="css/main.css"]');
+    if (link) {
+      var href = link.getAttribute("href") || "";
+      var idx = href.indexOf("css/main.css");
+      if (idx > 0) return href.slice(0, idx);
+    }
+    return "/";
+  }
+
+  function initShellFromExistingHeader() {
+    if (!document.querySelector(".header")) return;
+    setActiveNav();
+    initNavDrawer();
+  }
+
   function injectPartials() {
     var headerHost = document.getElementById("site-header");
     var footerHost = document.getElementById("site-footer");
     if (!headerHost || !footerHost) {
+      initShellFromExistingHeader();
       return Promise.resolve();
     }
 
+    var base = partialBase();
+
     function load(name) {
-      return fetch("/" + name + ".html", { cache: "no-cache" }).then(function (r) {
+      return fetch(base + name + ".html", { cache: "no-cache" }).then(function (r) {
         if (!r.ok) throw new Error("Failed to load partial: " + name);
         return r.text();
       });
@@ -122,6 +141,7 @@
       })
       .catch(function (err) {
         console.error("[site-shell]", err);
+        initShellFromExistingHeader();
       });
   }
 
